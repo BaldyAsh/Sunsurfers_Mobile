@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   KeyboardAvoidingView
 } from 'react-native';
-import UserInput from './UserInput';
+import UserInput from '../views/UserInput';
 
-export default class Form extends Component {
+const {
+  inputsForm
+} = require('../styles/InputsForm');
+
+export default class CredForm extends Component {
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" style={inputsForm.container}>
         <UserInput
           placeholder="Login"
           autoCapitalize={'none'}
@@ -16,7 +19,7 @@ export default class Form extends Component {
           autoCorrect={false}
         />
         <UserInput
-          secureTextEntry={true}
+          secureTextEntry
           placeholder="Password"
           returnKeyType={'done'}
           autoCapitalize={'none'}
@@ -26,12 +29,3 @@ export default class Form extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-});

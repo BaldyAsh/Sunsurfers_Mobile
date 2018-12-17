@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 const {
   DEVICE_WIDTH
-} = require('../../helpers/constants');
+} = require('../../helpers/Constants');
 
 export default class SignupSection extends Component {
   render() {

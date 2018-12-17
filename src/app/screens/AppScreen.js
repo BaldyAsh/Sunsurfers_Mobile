@@ -10,7 +10,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 
-import arrowImg from '../../../images/left-arrow.png';
+import arrowImg from '../../images/left-arrow.png';
 
 const SIZE = 40;
 

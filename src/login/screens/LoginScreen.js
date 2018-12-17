@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Logo from '../forms/Logo';
-import Form from '../forms/Form';
-import Wallpaper from '../forms/Wallpaper';
-import ButtonSubmit from '../forms/ButtonSubmit';
-import SignupSection from '../forms/SignupSection';
 import { StyleSheet, View } from 'react-native';
+import Logo from '../views/Logo';
+import CredForm from '../components/CredForm';
+import Wallpaper from '../views/Wallpaper';
+import ButtonSubmit from '../components/ButtonSubmit';
+import SignupSection from '../components/SignupSection';
 
 export default class LoginScreen extends Component {
   render() {
@@ -12,7 +12,7 @@ export default class LoginScreen extends Component {
       <Wallpaper>
         <View style={styles.frame}>
           <Logo />
-          <Form />
+          <CredForm />
           <SignupSection />
           <ButtonSubmit />
         </View>

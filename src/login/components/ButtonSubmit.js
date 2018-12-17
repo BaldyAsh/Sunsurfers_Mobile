@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   TouchableOpacity,
   Text,
   Animated,
@@ -9,12 +8,16 @@ import {
   View,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import spinner from '../../../images/loading.gif';
+import spinner from '../../images/loading.gif';
 
 const {
   DEVICE_WIDTH,
   MARGIN
-} = require('../../helpers/constants');
+} = require('../../helpers/Constants');
+
+const {
+  mainButton
+} = require('../styles/MainButton');
 
 export default class ButtonSubmit extends Component {
   constructor() {
@@ -70,62 +73,24 @@ export default class ButtonSubmit extends Component {
     });
 
     return (
-      <View style={styles.container}>
+      <View style={mainButton.container}>
         <Animated.View style={{ width: changeWidth }}>
           <TouchableOpacity
-            style={styles.button}
+            style={mainButton.button}
             onPress={this._onPress}
             activeOpacity={1}
           >
             {this.state.isLoading ? (
-              <Image source={spinner} style={styles.image} />
+              <Image source={spinner} style={mainButton.image} />
             ) : (
-              <Text style={styles.text}>LOGIN</Text>
+              <Text style={mainButton.text}>LOGIN</Text>
             )}
           </TouchableOpacity>
           <Animated.View
-            style={[styles.circle, { transform: [{ scale: changeScale }] }]}
+            style={[mainButton.circle, { transform: [{ scale: changeScale }] }]}
           />
         </Animated.View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FBBF09',
-    height: MARGIN,
-    borderRadius: 20,
-    zIndex: 100,
-  },
-  circle: {
-    height: MARGIN,
-    width: MARGIN,
-    marginTop: -MARGIN,
-    borderWidth: 1,
-    borderColor: '#FBBF09',
-    borderRadius: 100,
-    alignSelf: 'center',
-    zIndex: 99,
-    backgroundColor: '#FBBF09',
-  },
-  text: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: 'white',
-    backgroundColor: 'transparent',
-  },
-  image: {
-    width: 24,
-    height: 24,
-  },
-});

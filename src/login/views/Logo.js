@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
-import logoImg from '../../../images/logo.png';
+import logoImg from '../../images/logo.png';
 
 const logoWidth = 70;
 const logoHeight = 90;

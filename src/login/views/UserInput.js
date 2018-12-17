@@ -4,7 +4,7 @@ import { StyleSheet, View, TextInput } from 'react-native';
 
 const {
   DEVICE_WIDTH
-} = require('../../helpers/constants');
+} = require('../../helpers/Constants');
 
 export default class UserInput extends Component {
   render() {

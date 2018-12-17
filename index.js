@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
 
-import Main from './src/components/Main';
+import Main from './src/Main';
 
 export default class Sunsurfers extends Component {
   render() {
