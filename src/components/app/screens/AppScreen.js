@@ -8,6 +8,7 @@ import {
   Easing,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import MapView from 'react-native-maps';
 
 import arrowImg from '../../../images/left-arrow.png';
 
@@ -49,6 +50,16 @@ export default class AppScreen extends Component {
 
     return (
       <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          region={{
+            latitude: 59.32,
+            longitude: 18.07,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
+          }}
+        >
+        </MapView>
         <TouchableOpacity
           onPress={this._onPress}
           style={styles.button}
@@ -66,10 +77,13 @@ export default class AppScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    margin: 20,
-    alignItems: 'flex-end',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   button: {
     alignItems: 'center',
@@ -91,4 +105,11 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
 });
