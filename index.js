@@ -1,23 +1,4 @@
-import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View } from 'react-native';
-
-import Main from './src/Main';
-
-export default class Sunsurfers extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Main />
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-  },
-});
+import { AppRegistry } from 'react-native';
+import Sunsurfers from './src/app';
 
 AppRegistry.registerComponent('sunsurfers', () => Sunsurfers);
