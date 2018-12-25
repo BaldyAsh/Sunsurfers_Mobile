@@ -7,17 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "expo": "^31.0.6",
     "firebase": "^5.7.1",
     "lodash": "^4.17.11",
     "node-fetch": "^2.3.0",
     "react": "16.6.3",
     "react-native": "0.57.8",
+    "react-native-image-picker": "^0.27.2",
     "react-native-maps": "^0.22.1",
     "react-native-router-flux": "^4.0.6",
     "react-navigation": "^3.0.9",
-    "scaledrone-react-native": "^1.4.0",
-    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

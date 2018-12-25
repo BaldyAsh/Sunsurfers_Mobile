@@ -4,7 +4,6 @@ import firebase from 'firebase';
 import { Card, CardSection, Button, Input, Spinner, Photo } from './common';
 import Wallpaper from './common/Wallpaper';
 import { Actions } from 'react-native-router-flux';
-import { ImagePicker } from 'expo';
 import photoImg from '../images/photo.png';
 
 const {
