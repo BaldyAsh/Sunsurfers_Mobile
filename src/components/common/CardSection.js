@@ -15,7 +15,8 @@ const styles = {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     position: 'relative',
-    alignItems: 'center'
+    alignItems: 'center',
+    alignSelf: 'center'
   }
 };
 

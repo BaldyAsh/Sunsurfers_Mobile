@@ -5,13 +5,15 @@ const {
   DEVICE_WIDTH
 } = require('../../helpers/Constants');
 
-const Input = ({ label, value, onChangeText, placeholder, secureTextEntry }) => {
+const Input = ({ borderColor, textColor, placeholderColor, label, value, onChangeText, placeholder, secureTextEntry }) => {
   const { inputStyle, labelStyle, containerStyle } = styles;
 
   return (
     <KeyboardAvoidingView behavior="padding" style={containerStyle}>
       <TextInput
-        placeholderTextColor={'#FFFFFF'}
+        borderColor={borderColor}
+        color={textColor}
+        placeholderTextColor={placeholderColor}
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
         autoCorrect={false}
@@ -31,9 +33,7 @@ const styles = {
     paddingLeft: 25,
     paddingRight: 25,
     borderRadius: 25,
-    borderWidth: 2,
-    borderColor: '#FBBF09',
-    color: '#FFFFFF'
+    borderWidth: 2
   },
   containerStyle: {
     alignItems: 'center',
