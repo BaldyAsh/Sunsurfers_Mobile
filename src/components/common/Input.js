@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, Text } from 'react-native';
+import { TextInput } from 'react-native';
 
 const {
   DEVICE_WIDTH

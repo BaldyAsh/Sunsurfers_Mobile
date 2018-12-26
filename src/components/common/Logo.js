@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     marginTop: 20,
-    width: DEVICE_HEIGHT * 0.2,
+    height: DEVICE_HEIGHT * 0.2,
   }
 });
 

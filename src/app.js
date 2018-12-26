@@ -78,13 +78,13 @@ class Sunsurfers extends Component {
             component={LoginForm}
             animation='fade'
             hideNavBar
-            initial
           />
           <Scene
             key="credForm"
             component={CredForm}
             animation='fade'
             hideNavBar
+            initial
           />
           <Scene
             key="mapForm"

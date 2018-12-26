@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, KeyboardAvoidingView, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
-import { Card, CardSection, Button, Input, Spinner, Photo, Error } from './common';
-import Wallpaper from './common/Wallpaper';
+import { Button, Input, Spinner, Photo, Error } from './common';
 import { Actions } from 'react-native-router-flux';
-import photoImg from '../images/photo.png';
 import ImagePicker from 'react-native-image-picker';
+
+import photoImg from '../images/photo.png';
 
 const {
   DEVICE_WIDTH,
-  MARGIN
+  DEVICE_HEIGHT
 } = require('../helpers/Constants');
-
-const options = {
-  title: 'Pic image for avatar',
-  takePhotoButtonTitle: 'Take photo with your camera',
-  chooseFromLibraryButtonTitle: 'Choose photo from library',
-};
 
 class CredForm extends Component {
   state = { login: '', firstname: '', secondname: '', loading: false, error: '', pictureUrl: photoImg, picture: null };
@@ -35,7 +29,7 @@ class CredForm extends Component {
 
     this.setState({ error: '', loading: true });
 
-    this.onLoginSuccess()
+    this.onLoginSuccess();
     // firebase.auth().signInWithEmailAndPassword(email, password)
     //   .then(this.onLoginSuccess.bind(this))
     //   .catch(() => {
@@ -46,7 +40,7 @@ class CredForm extends Component {
   }
 
   onLoginFail() {
-    console.log('Wrong login')
+    console.log('Wrong login');
     this.setState({ error: 'Wrong login', loading: false });
   }
 
@@ -67,6 +61,39 @@ class CredForm extends Component {
     Actions.mapForm({ email: email });
   }
 
+  selectPhotoTapped() {
+    const options = {
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        console.log(source);
+        console.log(response.data);
+        this.setState({
+          pictureUrl: source,
+          picture: response.data
+        });
+      }
+    });
+  }
+
   renderButton() {
     if (this.state.loading) {
       return <Spinner size="small" />;
@@ -79,143 +106,109 @@ class CredForm extends Component {
     );
   }
 
-  changePhoto = async () => {
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('Image Picker Error: ', response.error);
-      }
-
-      else {
-        let source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-          pictureUrl: source,
-          picture: response.data
-        });
-      }
-    });
-  }
-
   render() {
     const { pictureUrl } = this.state;
+    console.log('pic uri: ', pictureUrl);
     return (
       <View style={styles.background}>
-        <View style={styles.frame}>
-          <Card>
-            <CardSection>
-              <View
-                style={{
-                  justifyContent: 'flex-start',
-                  height: 40,
-                  flex: 1,
-                  backgroundColor: 'transparent' }}
-              >
-              <Text style={styles.topHeaderTextStyle}>
-                Welcome to #sunsurfers!
-              </Text>
-            </View>
-            </CardSection>
-            <CardSection>
-              <View
-                style={{
-                  justifyContent: 'flex-start',
-                  height: 40,
-                  flex: 1,
-                  backgroundColor: 'transparent' }}
-              >
-                <Text style={styles.botHeaderTextStyle}>
-                  Please fill this form :)
-                </Text>
-              </View>
-            </CardSection>
-            <CardSection>
-              <TouchableOpacity
-                onPress={() => this.changePhoto()}
-                style={{
-                  alignItems: 'center',
-                  width: 100,
-                  height: 100,
-                }}
-              >
-                <Photo
-                  source={pictureUrl}
-                />
-              </TouchableOpacity>
-            </CardSection>
-            <CardSection>
-              <TouchableOpacity
-                onPress={() => this.changePhoto()}
-                style={{
-                  alignItems: 'center',
-                  width: 100,
-                  height: 40,
-                }}
-              >
-                <Text style={styles.addPhotoTextStyle}>
-                  Add photo
-                </Text>
-              </TouchableOpacity>
-            </CardSection>
-            <CardSection>
-              <Input
-                borderColor='#979797'
-                textColor='#333333'
-                placeholderColor='#979797'
-                placeholder='Login'
-                label='Login'
-                value={this.state.login}
-                onChangeText={login => this.setState({ login })}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                borderColor='#979797'
-                textColor='#333333'
-                placeholderColor='#979797'
-                placeholder='First name'
-                label='First name'
-                value={this.state.firstname}
-                onChangeText={firstname => this.setState({ firstname })}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                borderColor='#979797'
-                textColor='#333333'
-                placeholderColor='#979797'
-                placeholder='Second name'
-                label='Second name'
-                value={this.state.secondname}
-                onChangeText={secondname => this.setState({ secondname })}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                borderColor='#979797'
-                textColor='#333333'
-                placeholderColor='#979797'
-                placeholder='City'
-                label='City'
-                value={this.state.city}
-                onChangeText={city => this.setState({ city })}
-              />
-            </CardSection>
-            <CardSection>
-              <Error text={this.state.error} />
-            </CardSection>
-            <CardSection>
-              {this.renderButton()}
-            </CardSection>
-          </Card>
-        </View>
+        <KeyboardAvoidingView
+          style={styles.frame}
+          behavior="padding"
+        >
+          <View
+            style={{
+              height: 40,
+              marginHorizontal: 10,
+              marginVertical: 5,
+              paddingVertical: 5,
+              width: DEVICE_WIDTH - 60,
+              justifyContent: 'flex-start',
+              backgroundColor: 'transparent' }}
+          >
+            <Text style={styles.topHeaderTextStyle}>
+              Welcome to #sunsurfers!
+            </Text>
+          </View>
+          <View
+            style={{
+              height: 40,
+              marginHorizontal: 10,
+              marginVertical: 5,
+              paddingVertical: 5,
+              width: DEVICE_WIDTH - 60,
+              justifyContent: 'flex-start',
+              backgroundColor: 'transparent' }}
+          >
+            <Text style={styles.botHeaderTextStyle}>
+              Please fill this form :)
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={this.selectPhotoTapped.bind(this)}
+            style={{
+              marginBottom: 20,
+              marginTop: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'center',
+              height: DEVICE_HEIGHT * 0.2,
+              width: DEVICE_HEIGHT * 0.2,
+            }}
+          >
+            <Photo
+              source={pictureUrl}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.selectPhotoTapped.bind(this)}
+            style={{
+              alignItems: 'center',
+              width: 100,
+              height: 40,
+            }}
+          >
+            <Text style={styles.addPhotoTextStyle}>
+              Add photo
+            </Text>
+          </TouchableOpacity>
+          <Input
+            borderColor='#979797'
+            textColor='#333333'
+            placeholderColor='#979797'
+            placeholder='Login'
+            label='Login'
+            value={this.state.login}
+            onChangeText={login => this.setState({ login })}
+          />
+          <Input
+            borderColor='#979797'
+            textColor='#333333'
+            placeholderColor='#979797'
+            placeholder='First name'
+            label='First name'
+            value={this.state.firstname}
+            onChangeText={firstname => this.setState({ firstname })}
+          />
+          <Input
+            borderColor='#979797'
+            textColor='#333333'
+            placeholderColor='#979797'
+            placeholder='Second name'
+            label='Second name'
+            value={this.state.secondname}
+            onChangeText={secondname => this.setState({ secondname })}
+          />
+          <Input
+            borderColor='#979797'
+            textColor='#333333'
+            placeholderColor='#979797'
+            placeholder='City'
+            label='City'
+            value={this.state.city}
+            onChangeText={city => this.setState({ city })}
+          />
+          {this.renderButton()}
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -223,52 +216,35 @@ class CredForm extends Component {
 
 const styles = {
   frame: {
-    top: 50,
-    color: 'transparent',
     backgroundColor: 'transparent',
     flex: 1,
-    maxHeight: 500,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   topHeaderTextStyle: {
     alignSelf: 'center',
     color: '#333333',
     fontSize: 20,
     fontWeight: '800',
-    paddingTop: 10,
-    backgroundColor: 'transparent',
-    paddingBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
   },
   botHeaderTextStyle: {
     alignSelf: 'center',
     color: '#333333',
     fontSize: 20,
     fontWeight: '400',
-    paddingTop: 10,
-    backgroundColor: 'transparent',
-    paddingBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
   },
   addPhotoTextStyle: {
     alignSelf: 'center',
     color: '#333333',
     fontSize: 20,
     fontWeight: '400',
-    paddingTop: 10,
-    backgroundColor: 'transparent',
-    paddingBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
   },
   background: {
     flex: 1,
-    backgroundColor: 'white',
+    width: null,
+    height: null,
     resizeMode: 'cover',
+    backgroundColor: 'white',
   },
 };
 

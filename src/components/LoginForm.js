@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import firebase from 'firebase';
-import { Card, CardSection, Button, Input, Spinner, Logo, Error } from './common';
-import Wallpaper from './common/Wallpaper';
 import { Actions } from 'react-native-router-flux';
 
-const {
-  DEVICE_HEIGHT
-} = require('../helpers/Constants');
+import { Button, Input, Spinner, Logo, Error } from './common';
+import Wallpaper from './common/Wallpaper';
 
 class LoginForm extends Component {
   state = { email: '', password: 'Sunsurfers', error: '', loading: false };
@@ -47,7 +44,7 @@ class LoginForm extends Component {
   }
 
   onLoginFail() {
-    console.log('Authentication Failed')
+    console.log('Authentication Failed');
     this.setState({ error: 'Authentication Failed', loading: false });
   }
 
