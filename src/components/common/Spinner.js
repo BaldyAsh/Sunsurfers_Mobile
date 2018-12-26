@@ -13,7 +13,11 @@ const styles = {
   spinnerStyle: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 100,
+    height: 50,
+    marginHorizontal: 10,
+    marginVertical: 5,
   }
 };
 

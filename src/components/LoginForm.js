@@ -6,8 +6,12 @@ import { Actions } from 'react-native-router-flux';
 import { Button, Input, Spinner, Logo, Error } from './common';
 import Wallpaper from './common/Wallpaper';
 
+const {
+  API
+} = require('../helpers/Constants');
+
 class LoginForm extends Component {
-  state = { email: '', password: 'Sunsurfers', error: '', loading: false };
+  state = { email: '', password: 'Sunsurfers', error: '', loading: false, authToken: '' };
 
   componentWillMount() {
     firebase.initializeApp({
@@ -34,6 +38,27 @@ class LoginForm extends Component {
 
     this.setState({ error: '', loading: true });
 
+    // fetch(API+'registration', {
+    //      method: 'POST',
+    //      headers: {
+    //        Accept: 'application/json',
+    //        'Content-Type': 'application/json'
+    //      },
+    //      body: JSON.stringify({
+    //        email: this.state.email
+    //      }),
+    //   })
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //      console.log(responseJson);
+    //      let resp = JSON.parse();
+    //      let authToken = resp.data.authToken;
+    //      this.onLoginSuccess.bind(this)
+    //   })
+    //   .catch((error) => {
+    //      this.onLoginFail.bind(this);
+    //   });
+
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
       .catch(() => {
@@ -51,25 +76,29 @@ class LoginForm extends Component {
   onLoginSuccess() {
     console.log('Go to app');
     const email = this.state.email;
+    const authToken = this.state.authToken;
     this.setState({
       email: '',
       password: '',
       loading: false,
-      error: ''
+      error: '',
+      authToken: ''
     });
-    Actions.mapForm({ email: email });
+    Actions.mapForm({ email: email, authToken: authToken });
   }
 
   onRegistrationSuccess() {
     console.log('Go to cred');
     const email = this.state.email;
+    const authToken = this.state.authToken;
     this.setState({
       email: '',
       password: '',
       loading: false,
-      error: ''
+      error: '',
+      authToken: ''
     });
-    Actions.credForm({ email: email });
+    Actions.credForm({ email: email, authToken: authToken });
   }
 
   renderButton() {
@@ -79,7 +108,7 @@ class LoginForm extends Component {
 
     return (
       <Button onPress={this.onButtonPress.bind(this)}>
-        Login
+        Send invite
       </Button>
     );
   }

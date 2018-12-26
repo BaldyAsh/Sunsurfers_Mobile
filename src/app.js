@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import LoginForm from './components/LoginForm';
 import MapForm from './components/MapForm';
 import CredForm from './components/CredForm';
+import CheckEmailForm from './components/CheckEmailForm';
 
 class Sunsurfers extends Component {
   state = { loggedIn: null };
@@ -66,6 +67,12 @@ class Sunsurfers extends Component {
               hideNavBar
               initial
             />
+            <Scene
+              key="checkEmailForm"
+              component={CheckEmailForm}
+              animation='fade'
+              hideNavBar
+            />
           </Scene>
         </Router>
       );
@@ -84,13 +91,19 @@ class Sunsurfers extends Component {
             component={CredForm}
             animation='fade'
             hideNavBar
-            initial
           />
           <Scene
             key="mapForm"
             component={MapForm}
             animation='fade'
             hideNavBar
+          />
+          <Scene
+            key="checkEmailForm"
+            component={CheckEmailForm}
+            animation='fade'
+            hideNavBar
+            initial
           />
         </Scene>
       </Router>

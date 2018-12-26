@@ -9,11 +9,13 @@ import photoImg from '../images/photo.png';
 
 const {
   DEVICE_WIDTH,
-  DEVICE_HEIGHT
+  DEVICE_HEIGHT,
+  API,
+  API_TOKEN
 } = require('../helpers/Constants');
 
 class CredForm extends Component {
-  state = { login: '', firstname: '', secondname: '', loading: false, error: '', pictureUrl: photoImg, picture: null };
+  state = { name: '', surname: '', info: '', loading: false, error: '', pictureUrl: photoImg, picture: null };
 
   componentDidMount() {
     console.log('Mounted 2');
@@ -25,11 +27,34 @@ class CredForm extends Component {
   }
 
   onButtonPress() {
-    const { login, firstname, secondname, pictureUrl, city, picture } = this.state;
+    const { name, surname, info, pictureUrl, picture } = this.state;
 
     this.setState({ error: '', loading: true });
 
-    this.onLoginSuccess();
+    // fetch(API+'registration', {
+    //      method: 'POST',
+    //      headers: {
+    //        Accept: 'application/json',
+    //        'Content-Type': 'application/json'
+    //      },
+    //      body: JSON.stringify({
+    //        authToken: this.props.authToken,
+    //        name: name,
+    //        surname: surname,
+    //        info: info,
+    //        picture: picture,
+    //      }),
+    //   })
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //      console.log(responseJson);
+    //      this.onUpdatingProfileSuccess.bind(this)
+    //   })
+    //   .catch((error) => {
+    //      this.onUpdatingProfileFail.bind(this);
+    //   });
+
+    this.onUpdatingProfileSuccess();
     // firebase.auth().signInWithEmailAndPassword(email, password)
     //   .then(this.onLoginSuccess.bind(this))
     //   .catch(() => {
@@ -39,26 +64,26 @@ class CredForm extends Component {
     //   });
   }
 
-  onLoginFail() {
-    console.log('Wrong login');
-    this.setState({ error: 'Wrong login', loading: false });
+  onUpdatingProfileFail() {
+    console.log('Wrong data');
+    this.setState({ error: 'Wrong data', loading: false });
   }
 
-  onLoginSuccess() {
+  onUpdatingProfileSuccess() {
     console.log('Go to app');
     const email = this.props.email;
+    const authToken = this.props.authToken;
     this.setState({
-      login: '',
-      firsname: '',
-      secondname: '',
-      city: '',
+      name: '',
+      surname: '',
+      info: '',
       pictureUrl: '',
       loading: false,
       error: '',
       picture: null
     });
     //Actions.mapForm();
-    Actions.mapForm({ email: email });
+    Actions.mapForm({ email: email, authToken: authToken });
   }
 
   selectPhotoTapped() {
@@ -101,7 +126,7 @@ class CredForm extends Component {
 
     return (
       <Button onPress={this.onButtonPress.bind(this)}>
-        Save and sign in
+        Ready
       </Button>
     );
   }
@@ -140,7 +165,7 @@ class CredForm extends Component {
               backgroundColor: 'transparent' }}
           >
             <Text style={styles.botHeaderTextStyle}>
-              Please fill this form :)
+              Please fill out the profile to make it easier to find you
             </Text>
           </View>
           <TouchableOpacity
@@ -175,37 +200,28 @@ class CredForm extends Component {
             borderColor='#979797'
             textColor='#333333'
             placeholderColor='#979797'
-            placeholder='Login'
-            label='Login'
-            value={this.state.login}
-            onChangeText={login => this.setState({ login })}
+            placeholder='Name'
+            label='Name'
+            value={this.state.name}
+            onChangeText={name => this.setState({ name })}
           />
           <Input
             borderColor='#979797'
             textColor='#333333'
             placeholderColor='#979797'
-            placeholder='First name'
-            label='First name'
-            value={this.state.firstname}
-            onChangeText={firstname => this.setState({ firstname })}
+            placeholder='Surname'
+            label='Surname'
+            value={this.state.surname}
+            onChangeText={surname => this.setState({ surname })}
           />
           <Input
             borderColor='#979797'
             textColor='#333333'
             placeholderColor='#979797'
-            placeholder='Second name'
-            label='Second name'
-            value={this.state.secondname}
-            onChangeText={secondname => this.setState({ secondname })}
-          />
-          <Input
-            borderColor='#979797'
-            textColor='#333333'
-            placeholderColor='#979797'
-            placeholder='City'
-            label='City'
-            value={this.state.city}
-            onChangeText={city => this.setState({ city })}
+            placeholder='Info & contacts'
+            label='Info & contacts'
+            value={this.state.info}
+            onChangeText={info => this.setState({ info })}
           />
           {this.renderButton()}
         </KeyboardAvoidingView>
