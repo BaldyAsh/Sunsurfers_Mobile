@@ -1,31 +1,24 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
-const logoWidth = 100;
-const logoHeight = 100;
+const {
+  DEVICE_HEIGHT
+} = require('../../helpers/Constants');
 
 const Photo = ({ source }) => {
-  const { container, image } = styles;
+  const { image } = styles;
   return (
-    <View style={container}>
-      <Image source={source} style={image} />
-    </View>
+    <Image source={source} style={image} />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 3,
-    flexDirection: 'column',
-    elevation: 1,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    alignItems: 'center'
-  },
   image: {
-    width: logoWidth,
-    height: logoHeight,
+    resizeMode: 'contain',
+    marginBottom: 20,
+    padding: 10,
+    marginTop: 20,
+    width: DEVICE_HEIGHT * 0.1,
   }
 });
 

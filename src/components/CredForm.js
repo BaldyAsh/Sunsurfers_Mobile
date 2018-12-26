@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
-import { Card, CardSection, Button, Input, Spinner, Photo } from './common';
+import { Card, CardSection, Button, Input, Spinner, Photo, Error } from './common';
 import Wallpaper from './common/Wallpaper';
 import { Actions } from 'react-native-router-flux';
 import photoImg from '../images/photo.png';
@@ -31,7 +31,7 @@ class CredForm extends Component {
   }
 
   onButtonPress() {
-    const { username, firstname, secondname, pictureUrl, city, picture } = this.state;
+    const { login, firstname, secondname, pictureUrl, city, picture } = this.state;
 
     this.setState({ error: '', loading: true });
 
@@ -74,7 +74,7 @@ class CredForm extends Component {
 
     return (
       <Button onPress={this.onButtonPress.bind(this)}>
-        Login
+        Save and sign in
       </Button>
     );
   }
@@ -191,6 +191,17 @@ class CredForm extends Component {
                 borderColor='#979797'
                 textColor='#333333'
                 placeholderColor='#979797'
+                placeholder='Second name'
+                label='Second name'
+                value={this.state.secondname}
+                onChangeText={secondname => this.setState({ secondname })}
+              />
+            </CardSection>
+            <CardSection>
+              <Input
+                borderColor='#979797'
+                textColor='#333333'
+                placeholderColor='#979797'
                 placeholder='City'
                 label='City'
                 value={this.state.city}
@@ -198,9 +209,7 @@ class CredForm extends Component {
               />
             </CardSection>
             <CardSection>
-              <Text style={styles.errorTextStyle}>
-                {this.state.error}
-              </Text>
+              <Error text={this.state.error} />
             </CardSection>
             <CardSection>
               {this.renderButton()}
@@ -219,12 +228,6 @@ const styles = {
     backgroundColor: 'transparent',
     flex: 1,
     maxHeight: 500,
-  },
-  errorTextStyle: {
-    fontSize: 20,
-    alignSelf: 'center',
-    alignItems: 'center',
-    color: 'red'
   },
   topHeaderTextStyle: {
     alignSelf: 'center',

@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, KeyboardAvoidingView } from 'react-native';
 import firebase from 'firebase';
-import { Card, CardSection, Button, Input, Spinner, Logo } from './common';
+import { Card, CardSection, Button, Input, Spinner, Logo, Error } from './common';
 import Wallpaper from './common/Wallpaper';
 import { Actions } from 'react-native-router-flux';
 
+const {
+  DEVICE_HEIGHT
+} = require('../helpers/Constants');
+
 class LoginForm extends Component {
-  state = { email: '', password: '', error: '', loading: false };
+  state = { email: '', password: 'Sunsurfers', error: '', loading: false };
 
   componentWillMount() {
     firebase.initializeApp({
@@ -86,44 +90,23 @@ class LoginForm extends Component {
   render() {
     return (
       <Wallpaper>
-        <View style={styles.frame}>
-          <Card>
-            <CardSection>
-              <Logo />
-            </CardSection>
-            <CardSection>
-              <Input
-                borderColor='#FBBF09'
-                textColor='#FFFFFF'
-                placeholderColor='white'
-                placeholder="E-mail"
-                label="Email"
-                value={this.state.email}
-                onChangeText={email => this.setState({ email })}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                borderColor='#FBBF09'
-                textColor='#FFFFFF'
-                placeholderColor='white'
-                secureTextEntry
-                placeholder="Password"
-                label="Password"
-                value={this.state.password}
-                onChangeText={password => this.setState({ password })}
-              />
-            </CardSection>
-            <CardSection>
-              <Text style={styles.errorTextStyle}>
-                {this.state.error}
-              </Text>
-            </CardSection>
-            <CardSection>
-              {this.renderButton()}
-            </CardSection>
-          </Card>
-        </View>
+        <KeyboardAvoidingView
+          style={styles.frame}
+          behavior="padding"
+        >
+          <Logo />
+          <Input
+            borderColor='#FBBF09'
+            textColor='#FFFFFF'
+            placeholderColor='white'
+            placeholder="E-mail"
+            label="Email"
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
+          />
+          <Error text={this.state.error} />
+          {this.renderButton()}
+        </KeyboardAvoidingView>
       </Wallpaper>
     );
   }
@@ -131,16 +114,46 @@ class LoginForm extends Component {
 
 const styles = {
   frame: {
-    top: 50,
+    backgroundColor: 'transparent',
     flex: 1,
-    maxHeight: 500,
-  },
-  errorTextStyle: {
-    fontSize: 20,
     alignItems: 'center',
-    alignSelf: 'center',
-    color: 'red'
-  }
+    justifyContent: 'center',
+  },
 };
 
 export default LoginForm;
+
+// <Card>
+//   <CardSection>
+//     <Logo />
+//   </CardSection>
+//   <CardSection>
+//     <Input
+//       borderColor='#FBBF09'
+//       textColor='#FFFFFF'
+//       placeholderColor='white'
+//       placeholder="E-mail"
+//       label="Email"
+//       value={this.state.email}
+//       onChangeText={email => this.setState({ email })}
+//     />
+//   </CardSection>
+//   <CardSection>
+//     <Input
+//       borderColor='#FBBF09'
+//       textColor='#FFFFFF'
+//       placeholderColor='white'
+//       secureTextEntry
+//       placeholder="Password"
+//       label="Password"
+//       value={this.state.password}
+//       onChangeText={password => this.setState({ password })}
+//     />
+//   </CardSection>
+//   <CardSection>
+//     <Error text={this.state.error} />
+//   </CardSection>
+//   <CardSection>
+//     {this.renderButton()}
+//   </CardSection>
+// </Card>

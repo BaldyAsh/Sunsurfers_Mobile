@@ -2,39 +2,30 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 const {
-  DEVICE_WIDTH,
-  MARGIN
+  DEVICE_WIDTH
 } = require('../../helpers/Constants');
 
 const Button = ({ onPress, children }) => {
-  const { buttonStyle, textStyle, container } = styles;
+  const { buttonStyle, textStyle } = styles;
 
   return (
-    <View style={container}>
-      <TouchableOpacity
-        onPress={onPress}
-        style={buttonStyle}
-        activeOpacity={1}
-      >
-        <Text style={textStyle}>
-          {children}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={onPress}
+      style={buttonStyle}
+      activeOpacity={1}
+    >
+      <Text style={textStyle}>
+        {children}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = {
-  container: {
-    flex: 1,
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
   textStyle: {
     alignSelf: 'center',
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: '600',
     paddingTop: 10,
     backgroundColor: 'transparent',
@@ -44,10 +35,12 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FBBF09',
-    height: MARGIN,
-    width: DEVICE_WIDTH - 40,
-    borderRadius: 20,
+    width: DEVICE_WIDTH - 60,
+    borderRadius: 25,
     zIndex: 100,
+    height: 50,
+    marginHorizontal: 10,
+    marginVertical: 5,
   }
 };
 
