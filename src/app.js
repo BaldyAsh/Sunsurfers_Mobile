@@ -1,10 +1,48 @@
 import React, { Component } from 'react';
-import { Router, Scene, ActionConst } from 'react-native-router-flux';
+import { Image } from 'react-native';
+import { Router, Scene, ActionConst, Tabs } from 'react-native-router-flux';
 import firebase from 'firebase';
 import LoginForm from './components/LoginForm';
 import MapForm from './components/MapForm';
 import CredForm from './components/CredForm';
 import CheckEmailForm from './components/CheckEmailForm';
+import NavBar from './components/common/NavBar';
+
+import locImg from './images/location.png';
+import prfImg from './images/user.png';
+import Colors from './helpers/Colors.js';
+
+const LocTabIcon = () => {
+  return (
+    <Image
+      source={locImg}
+      style={{
+        alignItems: 'center',
+        resizeMode: 'stretch',
+        alignSelf: 'center',
+        height: 30,
+        width: 30,
+        color: 'white'
+      }}
+    />
+  );
+};
+
+const PrfTabIcon = () => {
+  return (
+    <Image
+      source={prfImg}
+      style={{
+        alignItems: 'center',
+        resizeMode: 'stretch',
+        alignSelf: 'center',
+        height: 30,
+        width: 30,
+        color: 'white'
+      }}
+    />
+  );
+};
 
 class Sunsurfers extends Component {
   state = { loggedIn: null };
@@ -90,20 +128,45 @@ class Sunsurfers extends Component {
             key="credForm"
             component={CredForm}
             animation='fade'
+            back={false}
             hideNavBar
           />
           <Scene
-            key="mapForm"
-            component={MapForm}
-            animation='fade'
+            key="tabs"
+            tabs
+            showLabel={false}
+            swipeEnabled
+            activeBackgroundColor={Colors.main}
+            inactiveBackgroundColor="gray"
+            inactiveTintColor="white"
             hideNavBar
-          />
+            activeTintColor="white"
+            initial
+          >
+            <Scene
+              key="mapForm"
+              component={MapForm}
+              animation='fade'
+              title='Location'
+              icon={LocTabIcon}
+              navBar={NavBar}
+              back={false}
+            />
+            <Scene
+              key="credForm"
+              component={CredForm}
+              animation='fade'
+              title='Profile'
+              icon={PrfTabIcon}
+              navBar={NavBar}
+              back={false}
+            />
+          </Scene>
           <Scene
             key="checkEmailForm"
             component={CheckEmailForm}
             animation='fade'
             hideNavBar
-            initial
           />
         </Scene>
       </Router>

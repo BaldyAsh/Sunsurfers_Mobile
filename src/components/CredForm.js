@@ -5,13 +5,13 @@ import { Button, Input, Spinner, Photo, Error } from './common';
 import { Actions } from 'react-native-router-flux';
 import ImagePicker from 'react-native-image-picker';
 
+import Colors from '../helpers/Colors.js';
 import photoImg from '../images/photo.png';
 
 const {
   DEVICE_WIDTH,
   DEVICE_HEIGHT,
-  API,
-  API_TOKEN
+  API
 } = require('../helpers/Constants');
 
 class CredForm extends Component {
@@ -197,27 +197,27 @@ class CredForm extends Component {
             </Text>
           </TouchableOpacity>
           <Input
-            borderColor='#979797'
-            textColor='#333333'
-            placeholderColor='#979797'
+            borderColor={Colors.gray}
+            textColor='black'
+            placeholderColor={Colors.gray}
             placeholder='Name'
             label='Name'
             value={this.state.name}
             onChangeText={name => this.setState({ name })}
           />
           <Input
-            borderColor='#979797'
-            textColor='#333333'
-            placeholderColor='#979797'
+            borderColor={Colors.gray}
+            textColor='black'
+            placeholderColor={Colors.gray}
             placeholder='Surname'
             label='Surname'
             value={this.state.surname}
             onChangeText={surname => this.setState({ surname })}
           />
           <Input
-            borderColor='#979797'
-            textColor='#333333'
-            placeholderColor='#979797'
+            borderColor={Colors.gray}
+            textColor='black'
+            placeholderColor={Colors.gray}
             placeholder='Info & contacts'
             label='Info & contacts'
             value={this.state.info}
@@ -239,19 +239,19 @@ const styles = {
   },
   topHeaderTextStyle: {
     alignSelf: 'center',
-    color: '#333333',
+    color: 'black',
     fontSize: 20,
     fontWeight: '800',
   },
   botHeaderTextStyle: {
     alignSelf: 'center',
-    color: '#333333',
+    color: 'black',
     fontSize: 20,
     fontWeight: '400',
   },
   addPhotoTextStyle: {
     alignSelf: 'center',
-    color: '#333333',
+    color: 'black',
     fontSize: 20,
     fontWeight: '400',
   },

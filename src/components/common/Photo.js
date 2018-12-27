@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 
+import Colors from '../../helpers/Colors.js';
+
 const {
   DEVICE_HEIGHT
 } = require('../../helpers/Constants');
@@ -17,7 +19,7 @@ const Photo = ({ source }) => {
 const styles = StyleSheet.create({
   image: {
     borderRadius: DEVICE_HEIGHT * 0.2 / 2,
-    borderColor: '#9B9B9B',
+    borderColor: Colors.gray,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
   },
   ImageContainer: {
     borderRadius: DEVICE_HEIGHT * 0.2 / 2,
-    borderColor: '#9B9B9B',
+    borderColor: Colors.gray,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',

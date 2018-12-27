@@ -80,13 +80,13 @@ class CheckEmailForm extends Component {
 const styles = {
   text: {
     alignSelf: 'center',
-    color: '#FFFFFF',
+    color: 'white',
     fontSize: 20,
     fontWeight: '400',
   },
   boldText: {
     alignSelf: 'center',
-    color: '#FFFFFF',
+    color: 'white',
     fontSize: 20,
     fontWeight: '600',
   },

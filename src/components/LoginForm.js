@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 
 import { Button, Input, Spinner, Logo, Error } from './common';
 import Wallpaper from './common/Wallpaper';
+import Colors from '../helpers/Colors.js';
 
 const {
   API
@@ -122,8 +123,8 @@ class LoginForm extends Component {
         >
           <Logo />
           <Input
-            borderColor='#FBBF09'
-            textColor='#FFFFFF'
+            borderColor={Colors.main}
+            textColor='white'
             placeholderColor='white'
             placeholder="E-mail"
             label="Email"

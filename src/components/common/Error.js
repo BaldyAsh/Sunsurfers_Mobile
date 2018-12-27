@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+import Colors from '../../helpers/Colors.js';
+
 const {
   DEVICE_WIDTH
 } = require('../../helpers/Constants');
@@ -21,7 +23,7 @@ const styles = {
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',
-    color: '#F6546A'
+    color: Colors.error
   },
   containerStyle: {
     alignItems: 'center',

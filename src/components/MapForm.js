@@ -14,10 +14,12 @@ import {
   Header
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import PropTypes from 'prop-types';
 import MapView, { Marker } from 'react-native-maps';
 import arrowImg from '../images/left-arrow.png';
-import PropTypes from 'prop-types';
+import { Button, Input, Spinner, Logo, Error } from './common';
 import isEqual from 'lodash/isEqual';
+import Colors from '../helpers/Colors.js';
 
 const Images = [
   { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
@@ -315,9 +317,9 @@ const styles = StyleSheet.create({
   card: {
     padding: 10,
     elevation: 2,
-    backgroundColor: '#FFF',
+    backgroundColor: 'white',
     marginHorizontal: 10,
-    shadowColor: '#000',
+    shadowColor: 'black',
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
@@ -341,7 +343,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 12,
-    color: '#FBBF09',
+    color: Colors.main,
   },
   markerWrap: {
     alignItems: 'center',
@@ -351,16 +353,16 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#FBBF09',
+    backgroundColor: Colors.main,
   },
   ring: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#FBBF09',
+    backgroundColor: Colors.main,
     position: 'absolute',
     borderWidth: 1,
-    borderColor: '#FBBF09',
+    borderColor: Colors.main,
   },
   button: {
     alignItems: 'center',
@@ -372,12 +374,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   header: {
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     height: 60,
     paddingTop: 15,
-    shadowColor: '#000',
+    shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
