@@ -1,6 +1,6 @@
 const colors = {
   main: '#FBBF09',
-  gray: '#979797',
+  gray: '#545454',
   error: '#F6546A'
 };
 

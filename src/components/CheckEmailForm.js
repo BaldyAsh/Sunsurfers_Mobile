@@ -4,10 +4,6 @@ import { Text, View } from 'react-native';
 import Wallpaper from './common/Wallpaper';
 import { Logo } from './common';
 
-const {
-  DEVICE_HEIGHT,
-} = require('../helpers/Constants');
-
 class CheckEmailForm extends Component {
 
   componentWillMount() {

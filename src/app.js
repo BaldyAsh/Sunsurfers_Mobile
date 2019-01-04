@@ -1,48 +1,45 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
-import { Router, Scene, ActionConst, Tabs } from 'react-native-router-flux';
+import { Router, Scene, Tabs, Stack } from 'react-native-router-flux';
 import firebase from 'firebase';
 import LoginForm from './components/LoginForm';
 import MapForm from './components/MapForm';
 import CredForm from './components/CredForm';
+import UserForm from './components/UserForm';
+import FriendsForm from './components/FriendsForm';
 import CheckEmailForm from './components/CheckEmailForm';
-import NavBar from './components/common/NavBar';
 
 import locImg from './images/location.png';
 import prfImg from './images/user.png';
 import Colors from './helpers/Colors.js';
 
-const LocTabIcon = () => {
-  return (
-    <Image
-      source={locImg}
-      style={{
-        alignItems: 'center',
-        resizeMode: 'stretch',
-        alignSelf: 'center',
-        height: 30,
-        width: 30,
-        color: 'white'
-      }}
-    />
-  );
-};
+const LocTabIcon = () => (
+  <Image
+    source={locImg}
+    style={{
+      alignItems: 'center',
+      resizeMode: 'stretch',
+      alignSelf: 'center',
+      height: 30,
+      width: 30,
+      color: 'white'
+    }}
+  />
+);
 
-const PrfTabIcon = () => {
-  return (
-    <Image
-      source={prfImg}
-      style={{
-        alignItems: 'center',
-        resizeMode: 'stretch',
-        alignSelf: 'center',
-        height: 30,
-        width: 30,
-        color: 'white'
-      }}
-    />
-  );
-};
+const PrfTabIcon = () => (
+  <Image
+    source={prfImg}
+    style={{
+      alignItems: 'center',
+      resizeMode: 'stretch',
+      alignSelf: 'center',
+      height: 30,
+      width: 30,
+      color: 'white'
+    }}
+  />
+);
 
 class Sunsurfers extends Component {
   state = { loggedIn: null };
@@ -117,12 +114,13 @@ class Sunsurfers extends Component {
     }
     return (
       <Router>
-        <Scene key="root">
+        <Stack key="root">
           <Scene
             key="loginForm"
             component={LoginForm}
             animation='fade'
             hideNavBar
+            initial
           />
           <Scene
             key="credForm"
@@ -131,8 +129,7 @@ class Sunsurfers extends Component {
             back={false}
             hideNavBar
           />
-          <Scene
-            key="tabs"
+          <Tabs
             tabs
             showLabel={false}
             swipeEnabled
@@ -141,34 +138,49 @@ class Sunsurfers extends Component {
             inactiveTintColor="white"
             hideNavBar
             activeTintColor="white"
-            initial
+            lazy
+            type="replace"
           >
-            <Scene
-              key="mapForm"
-              component={MapForm}
-              animation='fade'
-              title='Location'
+            <Stack
+              key="tab1"
               icon={LocTabIcon}
-              navBar={NavBar}
-              back={false}
-            />
-            <Scene
-              key="credForm"
-              component={CredForm}
-              animation='fade'
-              title='Profile'
+              hideNavBar
+            >
+              <Scene
+                key="mapForm"
+                title='Location'
+                component={MapForm}
+                animation='fade'
+                back={false}
+              />
+              <Scene
+                key="usrForm"
+                component={UserForm}
+                animation='fade'
+                back
+              />
+            </Stack>
+            <Stack
+              key="tab2"
               icon={PrfTabIcon}
-              navBar={NavBar}
-              back={false}
-            />
-          </Scene>
+              hideNavBar
+            >
+              <Scene
+                key="friendsForm"
+                component={FriendsForm}
+                animation='fade'
+                title='Profile'
+                back={false}
+              />
+            </Stack>
+          </Tabs>
           <Scene
             key="checkEmailForm"
             component={CheckEmailForm}
             animation='fade'
             hideNavBar
           />
-        </Scene>
+        </Stack>
       </Router>
     );
   }

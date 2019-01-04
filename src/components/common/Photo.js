@@ -18,18 +18,18 @@ const Photo = ({ source }) => {
 
 const styles = StyleSheet.create({
   image: {
-    borderRadius: DEVICE_HEIGHT * 0.2 / 2,
+    borderRadius: DEVICE_HEIGHT * 0.1,
     borderColor: Colors.gray,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    resizeMode: 'stretch',
+    resizeMode: 'cover',
     alignSelf: 'center',
     height: DEVICE_HEIGHT * 0.2,
     width: DEVICE_HEIGHT * 0.2,
   },
   ImageContainer: {
-    borderRadius: DEVICE_HEIGHT * 0.2 / 2,
+    borderRadius: DEVICE_HEIGHT * 0.1,
     borderColor: Colors.gray,
     borderWidth: 1,
     justifyContent: 'center',

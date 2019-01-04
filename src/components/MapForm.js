@@ -1,24 +1,16 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  ScrollView,
   View,
   Image,
-  TouchableOpacity,
   Animated,
-  Easing,
-  Dimensions,
   PermissionsAndroid,
   Platform,
-  Text,
-  Header
+  Text
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import PropTypes from 'prop-types';
 import MapView, { Marker } from 'react-native-maps';
-import arrowImg from '../images/left-arrow.png';
-import { Button, Input, Spinner, Logo, Error } from './common';
-import isEqual from 'lodash/isEqual';
+import { NavBar } from './common';
 import Colors from '../helpers/Colors.js';
 
 const Images = [
@@ -59,6 +51,7 @@ class MapForm extends Component {
 
   state = {
     error: '',
+    name: 'Anton Grigorev',
     markers: [
       {
         coordinate: {
@@ -83,7 +76,7 @@ class MapForm extends Component {
           latitude: 45.5230786,
           longitude: -122.6701034,
         },
-        title: 'Oksana tolstikova',
+        title: 'Oksana Tolstikova',
         description: 'This is the third best place in Portland',
         image: Images[2],
       },
@@ -151,10 +144,10 @@ class MapForm extends Component {
     // eslint-disable-next-line no-undef
     this.watchID = navigator.geolocation.watchPosition((position) => {
       const region = {
-        latitude:       position.coords.latitude,
-        longitude:      position.coords.longitude,
-        latitudeDelta:  0.00922*1.5,
-        longitudeDelta: 0.00421*1.5
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        latitudeDelta: 0.00922 * 1.5,
+        longitudeDelta: 0.00421 * 1.5
       };
       console.log(region);
       this.onRegionChange(region);
@@ -192,7 +185,6 @@ class MapForm extends Component {
   }
 
   render() {
-
     const interpolations = this.state.markers.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
@@ -213,73 +205,79 @@ class MapForm extends Component {
     });
 
     return (
-      <View style={styles.container}>
-
-        <MapView
-          ref={map => this.map = map}
-          initialRegion={this.state.region}
-          style={styles.container}
-          showsUserLocation
-          followUserLocation
-          onRegionChange={this.onRegionChange.bind(this)}
-        >
-          {this.state.markers.map((marker, index) => {
-            const scaleStyle = {
-              transform: [
+      <View style={styles.background}>
+        <NavBar
+         leftText={this.state.name}
+         onLeft={() => Actions.usrForm()}
+         onRight={() => console.log('pressed search')}
+        />
+        <View style={styles.container}>
+          <MapView
+            ref={map => this.map = map}
+            initialRegion={this.state.region}
+            style={styles.container}
+            showsUserLocation
+            followUserLocation
+            onRegionChange={this.onRegionChange.bind(this)}
+          >
+            {this.state.markers.map((marker, index) => {
+              const scaleStyle = {
+                transform: [
+                  {
+                    scale: interpolations[index].scale,
+                  },
+                ],
+              };
+              const opacityStyle = {
+                opacity: interpolations[index].opacity,
+              };
+              return (
+                <MapView.Marker key={index} coordinate={marker.coordinate}>
+                  <Animated.View style={[styles.markerWrap, opacityStyle]}>
+                    <Animated.View style={[styles.ring, scaleStyle]} />
+                    <View style={styles.marker} />
+                  </Animated.View>
+                </MapView.Marker>
+              );
+            })}
+          </MapView>
+          <Animated.ScrollView
+            horizontal
+            scrollEventThrottle={1}
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={CARD_WIDTH}
+            onScroll={Animated.event(
+              [
                 {
-                  scale: interpolations[index].scale,
-                },
-              ],
-            };
-            const opacityStyle = {
-              opacity: interpolations[index].opacity,
-            };
-            return (
-              <MapView.Marker key={index} coordinate={marker.coordinate}>
-                <Animated.View style={[styles.markerWrap, opacityStyle]}>
-                  <Animated.View style={[styles.ring, scaleStyle]} />
-                  <View style={styles.marker} />
-                </Animated.View>
-              </MapView.Marker>
-            );
-          })}
-        </MapView>
-        <Animated.ScrollView
-          horizontal
-          scrollEventThrottle={1}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: {
-                    x: this.animation,
+                  nativeEvent: {
+                    contentOffset: {
+                      x: this.animation,
+                    },
                   },
                 },
-              },
-            ],
-            { useNativeDriver: true }
-          )}
-          style={styles.scrollView}
-          contentContainerStyle={styles.endPadding}
-        >
-          {this.state.markers.map((marker, index) => (
-            <View style={styles.card} key={index}>
-              <Image
-                source={marker.image}
-                style={styles.cardImage}
-                resizeMode='cover'
-              />
-              <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
-                <Text numberOfLines={1} style={styles.cardDescription}>
-                  {marker.description}
-                </Text>
+              ],
+              { useNativeDriver: true }
+            )}
+            style={styles.scrollView}
+            contentContainerStyle={styles.endPadding}
+          >
+            {this.state.markers.map((marker, index) => (
+              <View style={styles.card} key={index}>
+                <Image
+                  source={marker.image}
+                  style={styles.cardImage}
+                  resizeMode='cover'
+                />
+                <View style={styles.textContent}>
+                  <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
+                  <Text numberOfLines={1} style={styles.cardDescription}>
+                    {marker.description}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ))}
-        </Animated.ScrollView>
+            ))}
+          </Animated.ScrollView>
+        </View>
       </View>
     );
   }
@@ -301,7 +299,7 @@ class MapForm extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    //...StyleSheet.absoluteFillObject,
     flex: 1,
   },
   scrollView: {
@@ -384,6 +382,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     elevation: 2,
     position: 'relative'
+  },
+  background: {
+    flex: 1,
+    width: null,
+    height: null,
+    elevation: 1,
+    resizeMode: 'cover',
+    backgroundColor: 'white',
   },
 });
 

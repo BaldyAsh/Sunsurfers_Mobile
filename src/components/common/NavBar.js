@@ -1,75 +1,110 @@
 import {
- View, StatusBar, Image, TouchableWithoutFeedback
+ View, Image, TouchableOpacity, Text
 } from 'react-native';
-import React, { Component } from 'react';
-import { Actions, Router, Scene } from 'react-native-router-flux';
+import React from 'react';
 
 import Colors from '../../helpers/Colors.js';
-import usr from '../../images/user_icon.png';
+import usrIcon from '../../images/simp_logo.png';
 
-class NavBar extends Component {
-  render() {
-    return (
-      <View style={styles.backgroundStyle}>
-        <StatusBar />
-          <View style={styles.containerStyle}>
-            <TouchableWithoutFeedback onPress={() => Actions.credScreen()}>
-              <Image
-              source={usr}
-              style={styles.usrIconStyle}
-              />
-            </TouchableWithoutFeedback>
-          </View>
-      </View>
-    );
-  }
+const {
+  DEVICE_WIDTH
+} = require('../../helpers/Constants');
 
-}
+const NavBar = props => (
+  <View style={styles.backgroundStyle}>
+    <View style={styles.containerStyle}>
+      <TouchableOpacity
+        onPress={props.onLeft}
+        style={styles.leftItemStyle}
+      >
+        <Image
+          source={props.leftIconUrl ? props.leftIconUrl : usrIcon}
+          style={styles.usrIconStyle}
+        />
+        <Text
+          style={styles.leftTextStyle}
+        >
+          {props.leftText}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={props.onRight}
+        style={styles.rightItemStyle}
+      >
+        <Image
+          source={props.rightIconUrl}
+          style={styles.rightIconStyle}
+        />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
+// class NavBar extends Component {
+//   render() {
+//     return (
+//       <View style={styles.backgroundStyle}>
+//         <StatusBar />
+//           <View style={styles.containerStyle}>
+//             <TouchableWithoutFeedback onPress={() => Actions.credScreen()}>
+//               <Image
+//               source={usr}
+//               style={styles.usrIconStyle}
+//               />
+//             </TouchableWithoutFeedback>
+//           </View>
+//       </View>
+//     );
+//   }
+// }
+
 const styles = {
+  leftItemStyle: {
+    resizeMode: 'contain',
+    flexDirection: 'row',
+    width: DEVICE_WIDTH / 2,
+    height: 40,
+    alignItems: 'center'
+  },
+  rightItemStyle: {
+    resizeMode: 'contain',
+    flexDirection: 'row',
+    width: DEVICE_WIDTH / 2,
+    height: 40,
+    justifyContent: 'flex-end',
+  },
   usrIconStyle: {
     resizeMode: 'contain',
     flexDirection: 'row',
     width: 40,
     height: 40,
   },
-  containerStyle: {
-    top: 25,
+  rightIconStyle: {
+    resizeMode: 'contain',
     flexDirection: 'row',
-    left: 10,
+    width: 40,
+    height: 40,
+    marginRight: 30,
+  },
+  containerStyle: {
+    top: 35,
+    flexDirection: 'row',
+    left: 20,
+    right: 20,
   },
   backgroundStyle: {
     backgroundColor: Colors.gray,
-    height: 75
+    height: 80
   },
-  backarrowStyle: {
-    resizeMode: 'contain',
-    flexDirection: 'row',
-    width: 50,
-    height: 50,
-    left: 0,
-    justifyContent: 'flex-start'
-  },
-  helpStyle: {
-    resizeMode: 'contain',
-      width: 50,
-      height: 50,
-      left: 220,
-      justifyContent: 'flex-end',
-      position: 'relative'
-
-  },
-  settingStyle: {
-    resizeMode: 'contain',
-    width: 50,
-    height: 50,
-    justifyContent: 'flex-end',
-    position: 'relative',
-    left: 210
+  leftTextStyle: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+    left: 10,
   }
 };
 
-
-export default NavBar;
+export { NavBar };
 
 // <View style={styles.backgroundStyle}>
 // <StatusBar />

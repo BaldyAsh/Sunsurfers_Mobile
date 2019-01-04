@@ -5,7 +5,13 @@ const {
   DEVICE_WIDTH
 } = require('../../helpers/Constants');
 
-const Input = ({ borderColor, textColor, placeholderColor, label, value, onChangeText, placeholder, secureTextEntry }) => {
+const Input = ({ borderColor,
+                 textColor,
+                 placeholderColor,
+                 value,
+                 onChangeText,
+                 placeholder,
+                 secureTextEntry }) => {
   const { inputStyle } = styles;
 
   return (

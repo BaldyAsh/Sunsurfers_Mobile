@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Text, KeyboardAvoidingView, View, TouchableOpacity } from 'react-native';
-import firebase from 'firebase';
-import { Button, Input, Spinner, Photo, Error } from './common';
 import { Actions } from 'react-native-router-flux';
 import ImagePicker from 'react-native-image-picker';
+import firebase from 'firebase';
+import { Button, Input, Spinner, Photo } from './common';
 
 import Colors from '../helpers/Colors.js';
 import photoImg from '../images/photo.png';
@@ -15,7 +15,13 @@ const {
 } = require('../helpers/Constants');
 
 class CredForm extends Component {
-  state = { name: '', surname: '', info: '', loading: false, error: '', pictureUrl: photoImg, picture: null };
+  state = { name: '',
+            surname: '',
+            info: '',
+            loading: false,
+            error: '',
+            pictureUrl: photoImg,
+            picture: null };
 
   componentDidMount() {
     console.log('Mounted 2');
@@ -27,7 +33,11 @@ class CredForm extends Component {
   }
 
   onButtonPress() {
-    const { name, surname, info, pictureUrl, picture } = this.state;
+    const { name,
+            surname,
+            info,
+            pictureUrl,
+            picture } = this.state;
 
     this.setState({ error: '', loading: true });
 
