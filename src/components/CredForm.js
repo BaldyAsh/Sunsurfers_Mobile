@@ -81,8 +81,6 @@ class CredForm extends Component {
 
   onUpdatingProfileSuccess() {
     console.log('Go to app');
-    const email = this.props.email;
-    const authToken = this.props.authToken;
     this.setState({
       name: '',
       surname: '',
@@ -165,20 +163,6 @@ class CredForm extends Component {
               Welcome to #sunsurfers!
             </Text>
           </View>
-          <View
-            style={{
-              height: 40,
-              marginHorizontal: 10,
-              marginVertical: 5,
-              paddingVertical: 5,
-              width: DEVICE_WIDTH - 60,
-              justifyContent: 'flex-start',
-              backgroundColor: 'transparent' }}
-          >
-            <Text style={styles.botHeaderTextStyle}>
-              Please fill out the profile to make it easier to find you
-            </Text>
-          </View>
           <TouchableOpacity
             onPress={this.selectPhotoTapped.bind(this)}
             style={{
@@ -194,18 +178,6 @@ class CredForm extends Component {
             <Photo
               source={pictureUrl}
             />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.selectPhotoTapped.bind(this)}
-            style={{
-              alignItems: 'center',
-              width: 100,
-              height: 40,
-            }}
-          >
-            <Text style={styles.addPhotoTextStyle}>
-              Add photo
-            </Text>
           </TouchableOpacity>
           <Input
             borderColor={Colors.gray}

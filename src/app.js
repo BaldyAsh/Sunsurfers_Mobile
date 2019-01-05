@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { Router, Scene, Tabs, Stack } from 'react-native-router-flux';
-import firebase from 'firebase';
 import LoginForm from './components/LoginForm';
 import MapForm from './components/MapForm';
 import CredForm from './components/CredForm';
+import EnterScreen from './components/EnterScreen';
 import UserForm from './components/UserForm';
 import FriendsForm from './components/FriendsForm';
 import CheckEmailForm from './components/CheckEmailForm';
@@ -22,7 +22,6 @@ const LocTabIcon = () => (
       alignSelf: 'center',
       height: 30,
       width: 30,
-      color: 'white'
     }}
   />
 );
@@ -36,85 +35,22 @@ const PrfTabIcon = () => (
       alignSelf: 'center',
       height: 30,
       width: 30,
-      color: 'white'
     }}
   />
 );
 
 class Sunsurfers extends Component {
-  state = { loggedIn: null };
-
-  // componentWillMount() {
-  //   firebase.initializeApp({
-  //     apiKey: 'AIzaSyAK9MCG3l6dC2I85sepp1Vx8fPOOa0qzaQ',
-  //     authDomain: 'sunsurfers-9dc7c.firebaseapp.com',
-  //     databaseURL: 'https://sunsurfers-9dc7c.firebaseio.com',
-  //     projectId: 'sunsurfers-9dc7c',
-  //     storageBucket: 'sunsurfers-9dc7c.appspot.com',
-  //     messagingSenderId: '902563320929'
-  //   });
-  //
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user) {
-  //       this.setState({ loggedIn: true });
-  //     } else {
-  //       this.setState({ loggedIn: false });
-  //     }
-  //   });
-  // }
-
-  // renderContent() {
-  //   switch (this.state.loggedIn) {
-  //     case true:
-  //       return (
-  //         <Button onPress={() => firebase.auth().signOut()}>
-  //           Log Out
-  //         </Button>
-  //       );
-  //     case false:
-  //       return <LoginForm />;
-  //     default:
-  //       return <Spinner size="large" />;
-  //   }
-  // }
 
   render() {
-    if (this.state.loggedIn) {
-      return (
-        <Router>
-          <Scene key="root">
-            <Scene
-              key="loginForm"
-              component={LoginForm}
-              animation='fade'
-              hideNavBar
-            />
-            <Scene
-              key="credForm"
-              component={CredForm}
-              animation='fade'
-              hideNavBar
-            />
-            <Scene
-              key="mapForm"
-              component={MapForm}
-              animation='fade'
-              hideNavBar
-              initial
-            />
-            <Scene
-              key="checkEmailForm"
-              component={CheckEmailForm}
-              animation='fade'
-              hideNavBar
-            />
-          </Scene>
-        </Router>
-      );
-    }
     return (
       <Router>
         <Stack key="root">
+          <Scene
+            key="enterScreen"
+            component={EnterScreen}
+            animation='fade'
+            hideNavBar
+          />
           <Scene
             key="loginForm"
             component={LoginForm}
@@ -127,11 +63,11 @@ class Sunsurfers extends Component {
             animation='fade'
             back={false}
             hideNavBar
+            initial
           />
           <Scene
             hideNavBar
             panHandlers={null}
-            initial
           >
             <Tabs
               key="tabs"

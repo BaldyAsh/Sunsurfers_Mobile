@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 
 import { Button, Input, Spinner, Logo, Error } from './common';
 import Wallpaper from './common/Wallpaper';
 import Colors from '../helpers/Colors.js';
+import DataManager from '../helpers/DataManager';
 
 const {
   API
@@ -74,32 +75,40 @@ class LoginForm extends Component {
     this.setState({ error: 'Authentication Failed', loading: false });
   }
 
-  onLoginSuccess() {
-    console.log('Go to app');
-    const email = this.state.email;
-    const authToken = this.state.authToken;
-    this.setState({
-      email: '',
-      password: '',
-      loading: false,
-      error: '',
-      authToken: ''
-    });
-    Actions.mapForm({ email: email, authToken: authToken });
+  onLoginSuccess = async () => {
+    try {
+      await AsyncStorage.setItem('USER', this.state.email);
+      const data = DataManager.getInstance();
+      data.setUserEmail(this.state.email);
+      this.setState({
+        email: '',
+        password: '',
+        loading: false,
+        error: '',
+        authToken: ''
+      });
+      Actions.tab1();
+    } catch (error) {
+      // Error saving data
+    }
   }
 
-  onRegistrationSuccess() {
-    console.log('Go to cred');
-    const email = this.state.email;
-    const authToken = this.state.authToken;
-    this.setState({
-      email: '',
-      password: '',
-      loading: false,
-      error: '',
-      authToken: ''
-    });
-    Actions.credForm({ email: email, authToken: authToken });
+  onRegistrationSuccess = async () => {
+    try {
+      await AsyncStorage.setItem('USER', this.state.email);
+      const data = DataManager.getInstance();
+      data.setUserEmail(this.state.email);
+      this.setState({
+        email: '',
+        password: '',
+        loading: false,
+        error: '',
+        authToken: ''
+      });
+      Actions.credForm();
+    } catch (error) {
+      // Error saving data
+    }
   }
 
   renderButton() {
