@@ -120,7 +120,6 @@ class Sunsurfers extends Component {
             component={LoginForm}
             animation='fade'
             hideNavBar
-            initial
           />
           <Scene
             key="credForm"
@@ -129,51 +128,55 @@ class Sunsurfers extends Component {
             back={false}
             hideNavBar
           />
-          <Tabs
-            tabs
-            showLabel={false}
-            swipeEnabled
-            activeBackgroundColor={Colors.main}
-            inactiveBackgroundColor="gray"
-            inactiveTintColor="white"
+          <Scene
             hideNavBar
-            activeTintColor="white"
-            lazy
-            type="replace"
+            panHandlers={null}
+            initial
           >
-            <Stack
-              key="tab1"
-              icon={LocTabIcon}
+            <Tabs
+              key="tabs"
+              showLabel={false}
+              swipeEnabled
+              activeBackgroundColor={Colors.main}
+              inactiveBackgroundColor="gray"
+              inactiveTintColor="white"
               hideNavBar
+              activeTintColor="white"
+              lazy
+              type="replace"
             >
-              <Scene
-                key="mapForm"
-                title='Location'
-                component={MapForm}
-                animation='fade'
-                back={false}
-              />
-              <Scene
-                key="usrForm"
-                component={UserForm}
-                animation='fade'
-                back
-              />
-            </Stack>
-            <Stack
-              key="tab2"
-              icon={PrfTabIcon}
-              hideNavBar
-            >
-              <Scene
-                key="friendsForm"
-                component={FriendsForm}
-                animation='fade'
-                title='Profile'
-                back={false}
-              />
-            </Stack>
-          </Tabs>
+              <Stack
+                key="tab1"
+                icon={LocTabIcon}
+                hideNavBar
+              >
+                <Scene
+                  key="mapForm"
+                  component={MapForm}
+                  animation='fade'
+                  back={false}
+                />
+                <Scene
+                  key="usrForm"
+                  component={UserForm}
+                  animation='fade'
+                  back
+                />
+              </Stack>
+              <Stack
+                key="tab2"
+                icon={PrfTabIcon}
+                hideNavBar
+              >
+                <Scene
+                  key="friendsForm"
+                  component={FriendsForm}
+                  animation='fade'
+                  back={false}
+                />
+              </Stack>
+            </Tabs>
+          </Scene>
           <Scene
             key="checkEmailForm"
             component={CheckEmailForm}

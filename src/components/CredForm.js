@@ -93,7 +93,8 @@ class CredForm extends Component {
       picture: null
     });
     //Actions.mapForm();
-    Actions.mapForm({ email: email, authToken: authToken });
+    //TODO: set users creds
+    Actions.tab1();
   }
 
   selectPhotoTapped() {
