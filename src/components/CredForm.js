@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import { Button, Input, Spinner, Photo } from './common';
 
 import Colors from '../helpers/Colors.js';
+import DataManager from '../helpers/DataManager';
 import photoImg from '../images/photo.png';
 
 const {
@@ -15,29 +16,30 @@ const {
 } = require('../helpers/Constants');
 
 class CredForm extends Component {
-  state = { name: '',
-            surname: '',
-            info: '',
-            loading: false,
-            error: '',
-            pictureUrl: photoImg,
-            picture: null };
 
-  componentDidMount() {
-    console.log('Mounted 2');
-    console.log(this.props.email);
-  }
+  constructor(props) {
+    super(props)
 
-  componentWillUnmount() {
-    console.log('Unmounted 2');
+    this.state = { firstname: '',
+                   lastname: '',
+                   info: '',
+                   loading: false,
+                   error: '',
+                   pictureUrl: photoImg,
+                   picture: null
+                 };
   }
 
   onButtonPress() {
-    const { name,
-            surname,
+    const { firstname,
+            lastname,
             info,
             pictureUrl,
             picture } = this.state;
+    const data = DataManager.getInstance();
+    const email = data.getUserEmail();
+
+    console.log(email);
 
     this.setState({ error: '', loading: true });
 
@@ -49,8 +51,8 @@ class CredForm extends Component {
     //      },
     //      body: JSON.stringify({
     //        authToken: this.props.authToken,
-    //        name: name,
-    //        surname: surname,
+    //        firstname: firstname,
+    //        lastname: lastname,
     //        info: info,
     //        picture: picture,
     //      }),
@@ -82,8 +84,8 @@ class CredForm extends Component {
   onUpdatingProfileSuccess() {
     console.log('Go to app');
     this.setState({
-      name: '',
-      surname: '',
+      firstname: '',
+      lastname: '',
       info: '',
       pictureUrl: '',
       loading: false,
@@ -183,19 +185,19 @@ class CredForm extends Component {
             borderColor={Colors.gray}
             textColor='black'
             placeholderColor={Colors.gray}
-            placeholder='Name'
-            label='Name'
-            value={this.state.name}
-            onChangeText={name => this.setState({ name })}
+            placeholder='First name'
+            label='First name'
+            value={this.state.firstname}
+            onChangeText={firstname => this.setState({ firstname })}
           />
           <Input
             borderColor={Colors.gray}
             textColor='black'
             placeholderColor={Colors.gray}
-            placeholder='Surname'
-            label='Surname'
-            value={this.state.surname}
-            onChangeText={surname => this.setState({ surname })}
+            placeholder='Last name'
+            label='Last name'
+            value={this.state.lastname}
+            onChangeText={lastname => this.setState({ lastname })}
           />
           <Input
             borderColor={Colors.gray}

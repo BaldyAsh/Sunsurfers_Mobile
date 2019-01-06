@@ -39,7 +39,7 @@ const PrfTabIcon = () => (
   />
 );
 
-class Sunsurfers extends Component {
+export default class Sunsurfers extends Component<{}> {
 
   render() {
     return (
@@ -50,6 +50,7 @@ class Sunsurfers extends Component {
             component={EnterScreen}
             animation='fade'
             hideNavBar
+            initial
           />
           <Scene
             key="loginForm"
@@ -63,23 +64,22 @@ class Sunsurfers extends Component {
             animation='fade'
             back={false}
             hideNavBar
-            initial
           />
           <Scene
             hideNavBar
             panHandlers={null}
+            type="replace"
           >
             <Tabs
               key="tabs"
               showLabel={false}
               swipeEnabled
               activeBackgroundColor={Colors.main}
-              inactiveBackgroundColor="gray"
+              inactiveBackgroundColor={Colors.gray}
               inactiveTintColor="white"
               hideNavBar
               activeTintColor="white"
               lazy
-              type="replace"
             >
               <Stack
                 key="tab1"
@@ -124,5 +124,3 @@ class Sunsurfers extends Component {
     );
   }
 }
-
-export default Sunsurfers;

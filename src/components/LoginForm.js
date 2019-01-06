@@ -13,7 +13,11 @@ const {
 } = require('../helpers/Constants');
 
 class LoginForm extends Component {
-  state = { email: '', password: 'Sunsurfers', error: '', loading: false, authToken: '' };
+  constructor(props) {
+    super(props)
+
+    this.state = { email: '', password: 'Sunsurfers', error: '', loading: false, authToken: '' };
+  }
 
   componentWillMount() {
     firebase.initializeApp({
@@ -25,14 +29,6 @@ class LoginForm extends Component {
       messagingSenderId: '902563320929'
     });
     console.log('Mounted 0.5');
-  }
-
-  componentDidMount() {
-    console.log('Mounted 1');
-  }
-
-  componentWillUnmount() {
-    console.log('Unmounted 1');
   }
 
   onButtonPress() {

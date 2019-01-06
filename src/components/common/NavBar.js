@@ -74,10 +74,11 @@ const styles = {
     justifyContent: 'flex-end',
   },
   usrIconStyle: {
-    resizeMode: 'contain',
     flexDirection: 'row',
     width: 40,
     height: 40,
+    borderRadius: 20,
+    resizeMode: 'cover',
   },
   rightIconStyle: {
     resizeMode: 'contain',

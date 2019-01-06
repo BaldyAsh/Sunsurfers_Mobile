@@ -13,12 +13,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { NavBar } from './common';
 import Colors from '../helpers/Colors.js';
 
-const Images = [
-  { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
-  { uri: 'https://pp.userapi.com/c628326/v628326604/1dfac/YmFsRXY3e3k.jpg' },
-  { uri: 'https://pp.userapi.com/c848536/v848536342/20924/p8MEWlwP0ag.jpg' },
-  { uri: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg' }
-];
+import DataManager from '../helpers/DataManager';
 
 const {
   DEVICE_WIDTH,
@@ -31,72 +26,17 @@ const CARD_WIDTH = CARD_HEIGHT - 50;
 
 class MapForm extends Component {
 
-  // static propTypes = {
-  //   name: PropTypes.string.isRequired,
-  //   email: PropTypes.string.isRequired,
-  // };
-  //
-  // static defaultProps = {
-  //   name: 'Sunsurfer',
-  //   email: 'some@gmail.com',
-  // };
-  //
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     region: null,
-  //     markers: null
-  //   };
-  // }
-
-  state = {
-    error: '',
-    name: 'Anton Grigorev',
-    markers: [
-      {
-        coordinate: {
-          latitude: 45.524548,
-          longitude: -122.6749817,
-        },
-        title: 'Anton Grigorev',
-        description: 'This is the best place in Portland',
-        image: Images[0],
-      },
-      {
-        coordinate: {
-          latitude: 45.524698,
-          longitude: -122.6655507,
-        },
-        title: 'Svetlana Tselisheva',
-        description: 'This is the second best place in Portland',
-        image: Images[1],
-      },
-      {
-        coordinate: {
-          latitude: 45.5230786,
-          longitude: -122.6701034,
-        },
-        title: 'Oksana Tolstikova',
-        description: 'This is the third best place in Portland',
-        image: Images[2],
-      },
-      {
-        coordinate: {
-          latitude: 45.521016,
-          longitude: -122.6561917,
-        },
-        title: 'Semen Makhonin',
-        description: 'This is the fourth best place in Portland',
-        image: Images[3],
-      },
-    ],
-    region: {
-      latitude: 45.52220671242907,
-      longitude: -122.6653281029795,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068,
-    },
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: '',
+      firstname: '',
+      lastname: '',
+      image: {},
+      markers: [],
+      region: {},
+    };
+  }
 
   componentWillMount() {
     this.index = 0;
@@ -104,7 +44,7 @@ class MapForm extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.email);
+    this._getCurrentUser();
     this._getCurrentLocation();
     this._animationListener();
   }
@@ -114,8 +54,75 @@ class MapForm extends Component {
     if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
   }
 
+  _getCurrentUser = async () => {
+    const data = await DataManager.getInstance();
+    const email = await data.getUserEmail();
+    const state = {
+      error: '',
+      firstname: 'Anton',
+      lastname: 'Grigorev',
+      image: { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
+    };
+    this.setState({
+      firstname: state.firstname,
+      lastname: 'Grigorev',
+      image: state.image
+    });
+  }
+
+  _fetchMarkers = async (region) => {
+    const data = await DataManager.getInstance();
+    const email = await data.getUserEmail();
+    const state = {
+      markers: [
+        {
+          coordinate: {
+            latitude: 45.524698,
+            longitude: -122.6655507,
+          },
+          title: 'Svetlana Tselisheva',
+          description: 'This is the second best place in Portland',
+          image: { uri: 'https://pp.userapi.com/c628326/v628326604/1dfac/YmFsRXY3e3k.jpg' },
+        },
+        {
+          coordinate: {
+            latitude: 45.5230786,
+            longitude: -122.6701034,
+          },
+          title: 'Oksana Tolstikova',
+          description: 'This is the third best place in Portland',
+          image: { uri: 'https://pp.userapi.com/c848536/v848536342/20924/p8MEWlwP0ag.jpg' },
+        },
+        {
+          coordinate: {
+            latitude: 45.521016,
+            longitude: -122.6561917,
+          },
+          title: 'Semen Makhonin',
+          description: 'This is the fourth best place in Portland',
+          image: { uri: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg' },
+        },
+      ],
+    };
+    this.setState({
+      markers: state.markers
+    });
+  }
+
   onRegionChange(region) {
-    this.setState({ region })
+    this.setState({
+      region: region
+    });
+    this.map.animateToRegion(
+      {
+        latitude: this.state.region.latitude,
+        longitude: this.state.region.longitude,
+        latitudeDelta: this.state.region.latitudeDelta,
+        longitudeDelta: this.state.region.longitudeDelta,
+      },
+      10
+    );
+    // this._fetchMarkers();
     //// Fetching markers data from server
     // return fetch('server' + '?latitude=' + this.state.region.latitude + '&longitude=' + this.state.region.logitude, { method: 'GET' })
     //   .then((response) => response.json())
@@ -140,14 +147,16 @@ class MapForm extends Component {
     }
   }
 
-  watchLocation() {
+  watchLocation = async () => {
     // eslint-disable-next-line no-undef
     this.watchID = navigator.geolocation.watchPosition((position) => {
       const region = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        latitudeDelta: 0.00922 * 1.5,
-        longitudeDelta: 0.00421 * 1.5
+        // latitude: position.coords.latitude,
+        // longitude: position.coords.longitude,
+        latitude: 45.52220671242907,
+        longitude: -122.6653281029795,
+        latitudeDelta: 0.04864195044303443,
+        longitudeDelta: 0.040142817690068
       };
       console.log(region);
       this.onRegionChange(region);
@@ -155,10 +164,9 @@ class MapForm extends Component {
   }
 
   _animationListener = async () => {
-    // We should detect when scrolling has stopped then animate
-    // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
-      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      // animate 30% away from landing on the next item
+      let index = Math.floor(value / CARD_WIDTH + 0.3);
       if (index >= this.state.markers.length) {
         index = this.state.markers.length - 1;
       }
@@ -207,18 +215,18 @@ class MapForm extends Component {
     return (
       <View style={styles.background}>
         <NavBar
-         leftText={this.state.name}
+         leftText={`${this.state.firstname} ${this.state.lastname}`}
+         leftIconUrl={this.state.image}
          onLeft={() => Actions.usrForm()}
          onRight={() => console.log('pressed search')}
         />
         <View style={styles.container}>
           <MapView
             ref={map => this.map = map}
-            initialRegion={this.state.region}
             style={styles.container}
             showsUserLocation
             followUserLocation
-            onRegionChange={this.onRegionChange.bind(this)}
+            onRegionChange={this._fetchMarkers.bind(this)}
           >
             {this.state.markers.map((marker, index) => {
               const scaleStyle = {

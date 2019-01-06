@@ -6,18 +6,6 @@ import { Logo } from './common';
 
 class CheckEmailForm extends Component {
 
-  componentWillMount() {
-    console.log('Mounted 0.5');
-  }
-
-  componentDidMount() {
-    console.log('Mounted 1');
-  }
-
-  componentWillUnmount() {
-    console.log('Unmounted 1');
-  }
-
   render() {
     return (
       <Wallpaper>

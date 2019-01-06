@@ -14,7 +14,19 @@ const {
 } = require('../helpers/Constants');
 
 class UserForm extends Component {
-  state = { name: 'Anton', surname: 'Grigorev', info: '88005553535', loading: false, error: '', pictureUrl: { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' }, picture: null };
+  constructor(props) {
+    super(props)
+
+    this.state = { firstname: 'Anton',
+                   lastname: 'Grigorev',
+                   info: '88005553535',
+                   loading: false,
+                   error: '',
+                   pictureUrl: { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
+                   picture: null
+                 };
+  }
+
 
   componentDidMount() {
     console.log('Mounted 2');
@@ -26,8 +38,8 @@ class UserForm extends Component {
   }
 
   onButtonPress() {
-    const { name,
-            surname,
+    const { firstname,
+            lastname,
             info,
             pictureUrl,
             picture } = this.state;
@@ -42,8 +54,8 @@ class UserForm extends Component {
     //      },
     //      body: JSON.stringify({
     //        authToken: this.props.authToken,
-    //        name: name,
-    //        surname: surname,
+    //        firstname: firstname,
+    //        lastname: lastname,
     //        info: info,
     //        picture: picture,
     //      }),
@@ -77,8 +89,8 @@ class UserForm extends Component {
     const email = this.props.email;
     const authToken = this.props.authToken;
     this.setState({
-      name: '',
-      surname: '',
+      firstname: '',
+      lastname: '',
       info: '',
       pictureUrl: '',
       loading: false,
@@ -135,7 +147,7 @@ class UserForm extends Component {
   }
 
   render() {
-    const { pictureUrl, name, surname, info } = this.state;
+    const { pictureUrl, firstname, lastname, info } = this.state;
     const pic = pictureUrl || photoImg;
     console.log('pic uri: ', pic);
     return (
@@ -169,19 +181,19 @@ class UserForm extends Component {
             borderColor={Colors.gray}
             textColor='black'
             placeholderColor={Colors.gray}
-            placeholder='Name'
-            label='Name'
-            value={name}
-            onChangeText={name => this.setState({ name })}
+            placeholder='First name'
+            label='First name'
+            value={firstname}
+            onChangeText={firstname => this.setState({ firstname })}
           />
           <Input
             borderColor={Colors.gray}
             textColor='black'
             placeholderColor={Colors.gray}
-            placeholder='Surname'
-            label='Surname'
-            value={surname}
-            onChangeText={surname => this.setState({ surname })}
+            placeholder='Last name'
+            label='Last name'
+            value={lastname}
+            onChangeText={lastname => this.setState({ lastname })}
           />
           <Input
             borderColor={Colors.gray}

@@ -7,14 +7,23 @@ const Card = (props) => (
   <View
     style={styles.box}
   >
-    <Image
-      style={styles.image}
-      source={{ uri: props.image }}
-    />
-    <Text
-      style={styles.username}
+    <View
+      style={styles.rawbox}
     >
-      {props.username}
+      <Image
+        style={styles.image}
+        source={{ uri: props.image }}
+      />
+      <Text
+        style={styles.username}
+      >
+        {`${props.firstname} ${props.lastname}`}
+      </Text>
+    </View>
+    <Text
+      style={styles.email}
+    >
+      {props.email}
     </Text>
   </View>
 );
@@ -25,25 +34,36 @@ const styles = {
     marginTop: 5,
     marginBottom: 5,
     backgroundColor: 'white',
-    flexDirection: 'row',
     shadowColor: 'black',
     shadowOpacity: 0.1,
     shadowOffset: {
       height: 1,
       width: -2
     },
-    elevation: 2
+    elevation: 2,
+    height: 70
+  },
+  rawbox: {
+    flexDirection: 'row'
   },
   username: {
     color: Colors.gray,
     fontSize: 18,
     alignSelf: 'center',
-    marginLeft: 10
+    left: 25
+  },
+  email: {
+    color: Colors.lightGray,
+    fontSize: 14,
+    alignSelf: 'flex-start',
+    left: 65
   },
   image: {
+    left: 15,
     borderRadius: 20,
     width: 40,
     height: 40,
+    top: 10
   }
 };
 
