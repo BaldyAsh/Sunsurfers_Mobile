@@ -220,12 +220,12 @@ class MapForm extends Component {
       ];
       const scale = this.animation.interpolate({
         inputRange,
-        outputRange: [0.5, 1.5, 0.5],
+        outputRange: [1.0, 2.0, 1.0],
         extrapolate: 'clamp',
       });
       const opacity = this.animation.interpolate({
         inputRange,
-        outputRange: [0.35, 1, 0.35],
+        outputRange: [0.8, 1, 0.8],
         extrapolate: 'clamp',
       });
       return { scale, opacity };
@@ -272,7 +272,13 @@ class MapForm extends Component {
                 <MapView.Marker key={index} coordinate={marker.coordinate}>
                   <Animated.View style={[styles.markerWrap, opacityStyle]}>
                     <Animated.View style={[styles.ring, scaleStyle]} />
-                    <View style={styles.marker} />
+                    <View style={styles.marker}>
+                      <Image
+                        source={marker.image}
+                        style={styles.markerImage}
+                        resizeMode='cover'
+                      />
+                    </View>
                   </Animated.View>
                 </MapView.Marker>
               );
@@ -369,6 +375,12 @@ const styles = StyleSheet.create({
     height: 0.9 * CARD_WIDTH,
     alignSelf: 'center',
   },
+  markerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignSelf: 'center',
+  },
   textContent: {
     flex: 1,
     backgroundColor: 'transparent',
@@ -391,6 +403,8 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Colors.main,
   },
   ring: {
