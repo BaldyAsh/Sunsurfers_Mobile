@@ -5,12 +5,12 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  StatusBar
 } from 'react-native';
-import { ListItem, SearchBar } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { NavBar, Card } from './common';
 
-import addIcon from '../images/plus.png';
 import DataManager from '../helpers/DataManager';
 import Colors from '../helpers/Colors.js';
 
@@ -20,6 +20,7 @@ class FriendsForm extends Component {
     super(props);
 
     this.state = {
+      email: '',
       loading: false,
       error: null,
       firstname: '',
@@ -60,16 +61,29 @@ class FriendsForm extends Component {
     });
   }
 
+  _chooseUser(user, forEdit) {
+    console.log(user.email);
+    Actions.usrForm({
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      image: user.image,
+      editable: forEdit
+    });
+  }
+
   _getCurrentUser = async () => {
     const data = await DataManager.getInstance();
     const email = await data.getUserEmail();
     const state = {
+      email: email,
       error: null,
       firstname: 'Anton',
       lastname: 'Grigorev',
       image: { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
     };
     this.setState({
+      email: email,
       firstname: state.firstname,
       lastname: state.lastname,
       image: state.image
@@ -101,34 +115,35 @@ class FriendsForm extends Component {
       error: null,
       users: [
         {
-          image: 'https://pp.userapi.com/c628326/v628326604/1dfac/YmFsRXY3e3k.jpg',
+          image: { uri: 'https://pp.userapi.com/c628326/v628326604/1dfac/YmFsRXY3e3k.jpg' },
           firstname: 'Svetlana',
           lastname: 'Tselisheva',
-          email: 'dfkdfja@dakfj.com'
+          email: 'email2@sun.com'
         },
         {
-          image: 'https://pp.userapi.com/c848536/v848536342/20924/p8MEWlwP0ag.jpg',
+          image: { uri: 'https://pp.userapi.com/c848536/v848536342/20924/p8MEWlwP0ag.jpg' },
           firstname: 'Oksana',
           lastname: 'Tolstikova',
-          email: 'dfdf@dakfj.com'
+          email: 'email3@sun.com'
         },
         {
-          image: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg',
+          image: { uri: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg' },
           firstname: 'Semen',
           lastname: 'Makhonin',
-          email: 'dfddfdff@dakfj.comdfdff'
+          email: 'email4@sun.com'
         },
       ],
     };
     this.setState({
       data: state.users,
+      friends: state.users,
       error: state.error || null,
       loading: false,
     });
     this.arrayholder = state.users;
   }
 
-  renderHeader = () => {
+  renderHeader() {
     return (
       <SearchBar
         placeholder="Search user..."
@@ -137,9 +152,9 @@ class FriendsForm extends Component {
         autoCorrect={false}
       />
     );
-  };
+  }
 
-  renderSeparator = () => {
+  renderSeparator() {
     return (
       <View
         style={{
@@ -150,18 +165,26 @@ class FriendsForm extends Component {
         }}
       />
     );
-  };
+  }
 
   render() {
+    const currentUser = {
+      email: this.state.email,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
+      image: this.state.image,
+    };
+
     if (this.state.loading) {
       return (
         <View style={styles.background}>
+          <StatusBar
+            barStyle="light-content"
+          />
           <NavBar
            leftText={`${this.state.firstname} ${this.state.lastname}`}
            leftIconUrl={this.state.image}
-           rightIconUrl={addIcon}
-           onLeft={() => Actions.usrForm()}
-           onRight={() => console.log('pressed search')}
+           onLeft={() => this._chooseUser(currentUser, true)}
           />
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator />
@@ -171,18 +194,20 @@ class FriendsForm extends Component {
     }
     return (
       <View style={styles.background}>
+        <StatusBar
+          barStyle="light-content"
+        />
         <NavBar
          leftText={`${this.state.firstname} ${this.state.lastname}`}
          leftIconUrl={this.state.image}
-         rightIconUrl={addIcon}
-         onLeft={() => Actions.usrForm()}
-         onRight={() => console.log('pressed search')}
+         onLeft={() => this._chooseUser(currentUser, true)}
         />
         <View style={styles.list}>
           <FlatList
             data={this.state.data}
             renderItem={({ item, separators }) => (
               <TouchableOpacity
+                onPress={() => this._chooseUser(item, false)}
                 onShowUnderlay={separators.highlight}
                 onHideUnderlay={separators.unhighlight}
               >

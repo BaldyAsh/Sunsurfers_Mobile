@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import DataManager from '../helpers/DataManager';
 import Wallpaper from './common/Wallpaper';
@@ -12,6 +12,8 @@ class EnterScreen extends Component {
         console.log(`user:${value}`);
         const data = DataManager.getInstance();
         data.setUserEmail(value);
+        const emailCheck = data.getUserEmail();
+        console.log(`user check:${emailCheck}`);
         setTimeout(() => {
           Actions.tab1();
         }, 500);
@@ -25,7 +27,11 @@ class EnterScreen extends Component {
 
   render() {
     return (
-      <Wallpaper />
+      <Wallpaper>
+        <StatusBar
+          barStyle="light-content"
+        />
+      </Wallpaper>
     );
   }
 }

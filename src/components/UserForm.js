@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, View, TouchableOpacity, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
@@ -15,29 +15,158 @@ const {
 
 class UserForm extends Component {
   constructor(props) {
-    super(props)
-
-    this.state = { firstname: 'Anton',
-                   lastname: 'Grigorev',
-                   info: '88005553535',
+    super(props);
+    console.log(`email from props:${props.email}`);
+    this.state = { delete: props.delete ? props.delete : false,
+                   add: props.add ? props.add : false,
+                   editable: props.editable ? props.editable : true,
+                   changed: false,
+                   firstname: props.firstname,
+                   lastname: props.lastname,
+                   email: props.email,
+                   info: '',
                    loading: false,
                    error: '',
-                   pictureUrl: { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
+                   pictureUrl: props.image,
                    picture: null
                  };
   }
 
-
   componentDidMount() {
-    console.log('Mounted 2');
-    console.log(this.props.email);
+    this._getUser();
   }
 
-  componentWillUnmount() {
-    console.log('Unmounted 2');
+  renderButton() {
+    if (this.state.loading) {
+      return <Spinner size="small" />;
+    }
+
+    if (this.props.delete) {
+      return (
+        <Button onPress={this.onDeletePress.bind(this)}>
+          Delete
+        </Button>
+      );
+    }
+
+    if (this.props.add) {
+      return (
+        <Button onPress={this.onAddPress.bind(this)}>
+          Add
+        </Button>
+      );
+    }
+
+    if (this.state.changed) {
+      return (
+        <Button onPress={this.onSavePress.bind(this)}>
+          Save changes
+        </Button>
+      );
+    }
   }
 
-  onButtonPress() {
+  _getUser = async () => {
+    const state = {
+      info: this.state.email,
+      error: null,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
+      pictureUrl: this.state.pictureUrl,
+    };
+    this.setState({
+      firstname: state.firstname,
+      lastname: state.lastname,
+      pictureUrl: state.pictureUrl,
+      info: state.info
+    });
+  }
+
+  onSavePress() {
+    const { firstname,
+            lastname,
+            info,
+            pictureUrl,
+            picture } = this.state;
+
+    this.setState({ error: '', loading: true });
+
+    // fetch(API+'registration', {
+    //      method: 'POST',
+    //      headers: {
+    //        Accept: 'application/json',
+    //        'Content-Type': 'application/json'
+    //      },
+    //      body: JSON.stringify({
+    //        authToken: this.props.authToken,
+    //        firstname: firstname,
+    //        lastname: lastname,
+    //        info: info,
+    //        picture: picture,
+    //      }),
+    //   })
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //      console.log(responseJson);
+    //      this.onUpdatingProfileSuccess.bind(this)
+    //   })
+    //   .catch((error) => {
+    //      this.onUpdatingProfileFail.bind(this);
+    //   });
+
+    this.onUpdatingProfileSuccess();
+    // firebase.auth().signInWithEmailAndPassword(email, password)
+    //   .then(this.onLoginSuccess.bind(this))
+    //   .catch(() => {
+    //     firebase.auth().createUserWithEmailAndPassword(email, password)
+    //       .then(this.onRegistrationSuccess.bind(this))
+    //       .catch(this.onLoginFail.bind(this));
+    //   });
+  }
+
+  onAddPress() {
+    const { firstname,
+            lastname,
+            info,
+            pictureUrl,
+            picture } = this.state;
+
+    this.setState({ error: '', loading: true });
+
+    // fetch(API+'registration', {
+    //      method: 'POST',
+    //      headers: {
+    //        Accept: 'application/json',
+    //        'Content-Type': 'application/json'
+    //      },
+    //      body: JSON.stringify({
+    //        authToken: this.props.authToken,
+    //        firstname: firstname,
+    //        lastname: lastname,
+    //        info: info,
+    //        picture: picture,
+    //      }),
+    //   })
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //      console.log(responseJson);
+    //      this.onUpdatingProfileSuccess.bind(this)
+    //   })
+    //   .catch((error) => {
+    //      this.onUpdatingProfileFail.bind(this);
+    //   });
+
+    this.onUpdatingProfileSuccess();
+    // firebase.auth().signInWithEmailAndPassword(email, password)
+    //   .then(this.onLoginSuccess.bind(this))
+    //   .catch(() => {
+    //     firebase.auth().createUserWithEmailAndPassword(email, password)
+    //       .then(this.onRegistrationSuccess.bind(this))
+    //       .catch(this.onLoginFail.bind(this));
+    //   });
+  }
+
+  onDeletePress() {
     const { firstname,
             lastname,
             info,
@@ -89,6 +218,7 @@ class UserForm extends Component {
     const email = this.props.email;
     const authToken = this.props.authToken;
     this.setState({
+      changed: false,
       firstname: '',
       lastname: '',
       info: '',
@@ -98,7 +228,7 @@ class UserForm extends Component {
       picture: null
     });
     //Actions.mapForm();
-    Actions.mapForm({ email: email, authToken: authToken });
+    Actions.pop();
   }
 
   selectPhotoTapped() {
@@ -128,22 +258,11 @@ class UserForm extends Component {
         console.log(response.data);
         this.setState({
           pictureUrl: source,
-          picture: response.data
+          picture: response.data,
+          changed: true
         });
       }
     });
-  }
-
-  renderButton() {
-    if (this.state.loading) {
-      return <Spinner size="small" />;
-    }
-
-    return (
-      <Button onPress={this.onButtonPress.bind(this)}>
-        Ready
-      </Button>
-    );
   }
 
   render() {
@@ -152,6 +271,9 @@ class UserForm extends Component {
     console.log('pic uri: ', pic);
     return (
       <View style={styles.background}>
+        <StatusBar
+          barStyle="light-content"
+        />
         <NavBar
          leftIconUrl={navIcon}
          onLeft={() => Actions.pop()}
@@ -184,7 +306,8 @@ class UserForm extends Component {
             placeholder='First name'
             label='First name'
             value={firstname}
-            onChangeText={firstname => this.setState({ firstname })}
+            onChangeText={firstname => this.setState({ firstname: firstname, changed: true })}
+            editable={this.state.editable}
           />
           <Input
             borderColor={Colors.gray}
@@ -193,7 +316,8 @@ class UserForm extends Component {
             placeholder='Last name'
             label='Last name'
             value={lastname}
-            onChangeText={lastname => this.setState({ lastname })}
+            onChangeText={lastname => this.setState({ lastname: lastname, changed: true })}
+            editable={this.state.editable}
           />
           <Input
             borderColor={Colors.gray}
@@ -202,8 +326,10 @@ class UserForm extends Component {
             placeholder='Info & contacts'
             label='Info & contacts'
             value={info}
-            onChangeText={info => this.setState({ info })}
+            onChangeText={info => this.setState({ info: info, changed: true })}
+            editable={this.state.editable}
           />
+          {this.renderButton()}
         </KeyboardAvoidingView>
       </View>
     );

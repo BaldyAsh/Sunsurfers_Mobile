@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { KeyboardAvoidingView, AsyncStorage, StatusBar } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 
@@ -14,7 +14,7 @@ const {
 
 class LoginForm extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = { email: '', password: 'Sunsurfers', error: '', loading: false, authToken: '' };
   }
@@ -122,6 +122,9 @@ class LoginForm extends Component {
   render() {
     return (
       <Wallpaper>
+        <StatusBar
+          barStyle="light-content"
+        />
         <KeyboardAvoidingView
           style={styles.frame}
           behavior="padding"

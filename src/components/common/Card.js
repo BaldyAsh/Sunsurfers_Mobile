@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 
 import Colors from '../../helpers/Colors.js';
+import usrIcon from '../../images/simp_logo.png';
 
 const Card = (props) => (
   <View
@@ -12,7 +13,7 @@ const Card = (props) => (
     >
       <Image
         style={styles.image}
-        source={{ uri: props.image }}
+        source={props.image ? props.image : usrIcon}
       />
       <Text
         style={styles.username}

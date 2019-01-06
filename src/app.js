@@ -110,6 +110,12 @@ export default class Sunsurfers extends Component<{}> {
                   animation='fade'
                   back={false}
                 />
+                <Scene
+                  key="usrForm"
+                  component={UserForm}
+                  animation='fade'
+                  back
+                />
               </Stack>
             </Tabs>
           </Scene>

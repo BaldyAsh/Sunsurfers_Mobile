@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StatusBar } from 'react-native';
 
 import Wallpaper from './common/Wallpaper';
 import { Logo } from './common';
@@ -9,6 +9,9 @@ class CheckEmailForm extends Component {
   render() {
     return (
       <Wallpaper>
+        <StatusBar
+          barStyle="light-content"
+        />
         <View
           style={{
             flex: 1,

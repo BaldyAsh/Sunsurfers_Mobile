@@ -6,7 +6,8 @@ import {
   Animated,
   PermissionsAndroid,
   Platform,
-  Text
+  Text,
+  StatusBar
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import MapView, { Marker } from 'react-native-maps';
@@ -22,13 +23,14 @@ const {
 } = require('../helpers/Constants');
 
 const CARD_HEIGHT = DEVICE_HEIGHT / 4;
-const CARD_WIDTH = CARD_HEIGHT - 50;
+const CARD_WIDTH = 2 * CARD_HEIGHT / 3;
 
 class MapForm extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      email: '',
       error: '',
       firstname: '',
       lastname: '',
@@ -57,13 +59,16 @@ class MapForm extends Component {
   _getCurrentUser = async () => {
     const data = await DataManager.getInstance();
     const email = await data.getUserEmail();
+    console.log(`email from data manager:${email}`);
     const state = {
+      email: email,
       error: '',
       firstname: 'Anton',
       lastname: 'Grigorev',
       image: { uri: 'https://pp.userapi.com/c850520/v850520044/30aed/9FqqbZWmOCs.jpg' },
     };
     this.setState({
+      email: state.email,
       firstname: state.firstname,
       lastname: 'Grigorev',
       image: state.image
@@ -77,29 +82,29 @@ class MapForm extends Component {
       markers: [
         {
           coordinate: {
-            latitude: 45.524698,
+            latitude: 45.526698,
             longitude: -122.6655507,
           },
           title: 'Svetlana Tselisheva',
-          description: 'This is the second best place in Portland',
+          description: 'email2@sun.com',
           image: { uri: 'https://pp.userapi.com/c628326/v628326604/1dfac/YmFsRXY3e3k.jpg' },
         },
         {
           coordinate: {
             latitude: 45.5230786,
-            longitude: -122.6701034,
+            longitude: -122.6801034,
           },
           title: 'Oksana Tolstikova',
-          description: 'This is the third best place in Portland',
+          description: 'email3@sun.com',
           image: { uri: 'https://pp.userapi.com/c848536/v848536342/20924/p8MEWlwP0ag.jpg' },
         },
         {
           coordinate: {
-            latitude: 45.521016,
-            longitude: -122.6561917,
+            latitude: 45.550016,
+            longitude: -122.6661917,
           },
           title: 'Semen Makhonin',
-          description: 'This is the fourth best place in Portland',
+          description: 'email4@sun.com',
           image: { uri: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg' },
         },
       ],
@@ -147,6 +152,18 @@ class MapForm extends Component {
     }
   }
 
+
+  _chooseUser(user) {
+    console.log(user.email);
+    Actions.usrForm({
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      image: user.image,
+      editable: true
+    });
+  }
+
   watchLocation = async () => {
     // eslint-disable-next-line no-undef
     this.watchID = navigator.geolocation.watchPosition((position) => {
@@ -155,8 +172,8 @@ class MapForm extends Component {
         // longitude: position.coords.longitude,
         latitude: 45.52220671242907,
         longitude: -122.6653281029795,
-        latitudeDelta: 0.04864195044303443,
-        longitudeDelta: 0.040142817690068
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5
       };
       console.log(region);
       this.onRegionChange(region);
@@ -182,8 +199,8 @@ class MapForm extends Component {
           this.map.animateToRegion(
             {
               ...coordinate,
-              latitudeDelta: this.state.region.latitudeDelta,
-              longitudeDelta: this.state.region.longitudeDelta,
+              latitudeDelta: 0.1,
+              longitudeDelta: 0.1,
             },
             350
           );
@@ -193,6 +210,8 @@ class MapForm extends Component {
   }
 
   render() {
+    console.log(`email from state:${this.state.email}`);
+
     const interpolations = this.state.markers.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
@@ -201,7 +220,7 @@ class MapForm extends Component {
       ];
       const scale = this.animation.interpolate({
         inputRange,
-        outputRange: [1, 2.5, 1],
+        outputRange: [0.5, 1.5, 0.5],
         extrapolate: 'clamp',
       });
       const opacity = this.animation.interpolate({
@@ -212,12 +231,22 @@ class MapForm extends Component {
       return { scale, opacity };
     });
 
+    const currentUser = {
+      email: this.state.email,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
+      image: this.state.image,
+    };
+
     return (
       <View style={styles.background}>
+        <StatusBar
+          barStyle="light-content"
+        />
         <NavBar
          leftText={`${this.state.firstname} ${this.state.lastname}`}
          leftIconUrl={this.state.image}
-         onLeft={() => Actions.usrForm()}
+         onLeft={() => this._chooseUser(currentUser)}
          onRight={() => console.log('pressed search')}
         />
         <View style={styles.container}>
@@ -277,7 +306,9 @@ class MapForm extends Component {
                   resizeMode='cover'
                 />
                 <View style={styles.textContent}>
-                  <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
+                  <Text numberOfLines={2} style={styles.cardtitle}>
+                    {marker.title}
+                  </Text>
                   <Text numberOfLines={1} style={styles.cardDescription}>
                     {marker.description}
                   </Text>
@@ -329,27 +360,28 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
-    height: CARD_HEIGHT,
     width: CARD_WIDTH,
     overflow: 'hidden',
+    flex: 1
   },
   cardImage: {
-    flex: 3,
-    width: '100%',
-    height: '100%',
+    width: 0.9 * CARD_WIDTH,
+    height: 0.9 * CARD_WIDTH,
     alignSelf: 'center',
   },
   textContent: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   cardtitle: {
-    fontSize: 12,
+    fontSize: 16,
     marginTop: 5,
     fontWeight: 'bold',
+    color: Colors.main
   },
   cardDescription: {
-    fontSize: 12,
-    color: Colors.main,
+    fontSize: 10,
+    color: Colors.lightGray,
   },
   markerWrap: {
     alignItems: 'center',

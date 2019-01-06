@@ -11,7 +11,9 @@ const Input = ({ borderColor,
                  value,
                  onChangeText,
                  placeholder,
-                 secureTextEntry }) => {
+                 secureTextEntry,
+                 editable
+               }) => {
   const { inputStyle } = styles;
 
   return (
@@ -25,6 +27,7 @@ const Input = ({ borderColor,
       style={inputStyle}
       value={value}
       onChangeText={onChangeText}
+      editable={editable}
     />
   );
 };

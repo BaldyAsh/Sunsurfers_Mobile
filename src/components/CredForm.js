@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, KeyboardAvoidingView, View, TouchableOpacity } from 'react-native';
+import { Text, KeyboardAvoidingView, View, TouchableOpacity, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
@@ -18,7 +18,7 @@ const {
 class CredForm extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = { firstname: '',
                    lastname: '',
@@ -147,6 +147,9 @@ class CredForm extends Component {
     console.log('pic uri: ', pictureUrl);
     return (
       <View style={styles.background}>
+        <StatusBar
+          barStyle="light-content"
+        />
         <KeyboardAvoidingView
           style={styles.frame}
           behavior="padding"
