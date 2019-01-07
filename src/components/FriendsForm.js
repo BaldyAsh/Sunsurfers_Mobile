@@ -37,30 +37,6 @@ class FriendsForm extends Component {
     this._searchFriends();
   }
 
-  _searchUsers = async (text) => {
-    console.log(text);
-    console.log(this.arrayholder);
-    const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.firstname.toUpperCase()} ${item.lastname.toUpperCase()} ${item.email.toUpperCase()}`;
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    // const newData = {
-    //   error: null,
-    //   users: [
-    //     {
-    //       image: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg',
-    //       firstname: 'Semen',
-    //       lastname: 'Makhonin',
-    //       email: 'dfddfdff@dakfj.comdfdff'
-    //     },
-    //   ],
-    // };
-    this.setState({
-      data: newData,
-    });
-  }
-
   _chooseUser(user, forEdit) {
     console.log(user.email);
     Actions.usrForm({
@@ -87,6 +63,30 @@ class FriendsForm extends Component {
       firstname: state.firstname,
       lastname: state.lastname,
       image: state.image
+    });
+  }
+
+  _searchUsers = async (text) => {
+    console.log(text);
+    console.log(this.arrayholder);
+    const newData = this.arrayholder.filter(item => {
+      const itemData = `${item.firstname.toUpperCase()} ${item.lastname.toUpperCase()} ${item.email.toUpperCase()}`;
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    // const newData = {
+    //   error: null,
+    //   users: [
+    //     {
+    //       image: 'https://pp.userapi.com/c844320/v844320808/c01af/sfgaqv9If8I.jpg',
+    //       firstname: 'Semen',
+    //       lastname: 'Makhonin',
+    //       email: 'dfddfdff@dakfj.comdfdff'
+    //     },
+    //   ],
+    // };
+    this.setState({
+      data: newData,
     });
   }
 
@@ -143,17 +143,6 @@ class FriendsForm extends Component {
     this.arrayholder = state.users;
   }
 
-  renderHeader() {
-    return (
-      <SearchBar
-        placeholder="Search user..."
-        round
-        onChangeText={text => this._searchUsers(text)}
-        autoCorrect={false}
-      />
-    );
-  }
-
   renderSeparator() {
     return (
       <View
@@ -186,6 +175,12 @@ class FriendsForm extends Component {
            leftIconUrl={this.state.image}
            onLeft={() => this._chooseUser(currentUser, true)}
           />
+          <SearchBar
+            placeholder="Search location..."
+            round
+            onChangeText={text => this._searchUsers(text)}
+            autoCorrect={false}
+          />
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator />
           </View>
@@ -201,6 +196,12 @@ class FriendsForm extends Component {
          leftText={`${this.state.firstname} ${this.state.lastname}`}
          leftIconUrl={this.state.image}
          onLeft={() => this._chooseUser(currentUser, true)}
+        />
+        <SearchBar
+          placeholder="Search location..."
+          round
+          onChangeText={text => this._searchUsers(text)}
+          autoCorrect={false}
         />
         <View style={styles.list}>
           <FlatList
@@ -220,7 +221,6 @@ class FriendsForm extends Component {
               </TouchableOpacity>
             )}
             keyExtractor={item => item.email}
-            ListHeaderComponent={this.renderHeader}
           />
         </View>
       </View>

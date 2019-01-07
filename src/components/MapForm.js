@@ -5,11 +5,13 @@ import {
   Image,
   Animated,
   PermissionsAndroid,
+  TouchableOpacity,
   Platform,
   Text,
   StatusBar
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { SearchBar } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import { NavBar } from './common';
 import Colors from '../helpers/Colors.js';
@@ -22,8 +24,9 @@ const {
   SIZE
 } = require('../helpers/Constants');
 
-const CARD_HEIGHT = DEVICE_HEIGHT / 4;
+const CARD_HEIGHT = DEVICE_HEIGHT / 5;
 const CARD_WIDTH = 2 * CARD_HEIGHT / 3;
+const MARKER_WIDTH = 200;
 
 class MapForm extends Component {
 
@@ -70,7 +73,7 @@ class MapForm extends Component {
     this.setState({
       email: state.email,
       firstname: state.firstname,
-      lastname: 'Grigorev',
+      lastname: state.lastname,
       image: state.image
     });
   }
@@ -127,6 +130,7 @@ class MapForm extends Component {
       },
       10
     );
+  }
     // this._fetchMarkers();
     //// Fetching markers data from server
     // return fetch('server' + '?latitude=' + this.state.region.latitude + '&longitude=' + this.state.region.logitude, { method: 'GET' })
@@ -137,7 +141,16 @@ class MapForm extends Component {
     //     this.setState(newState);
     //     console.log(responseJson);
     //   });
-  }
+   //   return fetch('server' + '?latitude=' + this.state.region.latitude + '&longitude=' + this.state.region.logitude, { method: 'GET' })
+    //     .then((response) => response.json())
+    //     .then((responseJson) => {
+    //       const newState = Object.assign({}, this.state);
+    //       newState.markers = responseJson;
+    //       newState.region.latitude = region.latitude;
+    //       newState.region.longitude = region.longitude;
+    //       this.setState(newState);
+    //       console.log(responseJson);
+    //     });
 
   _getCurrentLocation = async () => {
     if (this.props.coordinate) return;
@@ -162,6 +175,25 @@ class MapForm extends Component {
       image: user.image,
       editable: true
     });
+  }
+
+  _markerPressed = async (index) => {
+    this.setState({ selectedMarkerIndex: index });
+    clearTimeout(this.regionTimeout);
+    this.regionTimeout = setTimeout(() => {
+      if (this.index !== index) {
+        this.index = index;
+        const { coordinate } = this.state.markers[index];
+        this.map.animateToRegion(
+          {
+            ...coordinate,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          },
+          350
+        );
+      }
+    }, 10);
   }
 
   watchLocation = async () => {
@@ -191,45 +223,96 @@ class MapForm extends Component {
         index = 0;
       }
 
-      clearTimeout(this.regionTimeout);
-      this.regionTimeout = setTimeout(() => {
-        if (this.index !== index) {
-          this.index = index;
-          const { coordinate } = this.state.markers[index];
-          this.map.animateToRegion(
-            {
-              ...coordinate,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
-            },
-            350
-          );
-        }
-      }, 10);
+      this._markerPressed(index);
     });
+  }
+
+  _searchLocation = async (text) => {
+    console.log(text);
+    const region = {
+      // latitude: position.coords.latitude,
+      // longitude: position.coords.longitude,
+      latitude: 45.52220671242907,
+      longitude: -122.6653281029795,
+      latitudeDelta: 0.5,
+      longitudeDelta: 0.5
+    };
+    this.onRegionChange(region);
+  }
+
+  interpolate(marker, index) {
+    const inputRange = [
+      (index - 1) * CARD_WIDTH,
+      index * CARD_WIDTH,
+      ((index + 1) * CARD_WIDTH),
+    ];
+    const scale = this.animation.interpolate({
+      inputRange,
+      outputRange: [1.0, 2.0, 1.0],
+      extrapolate: 'clamp',
+    });
+    const opacity = this.animation.interpolate({
+      inputRange,
+      outputRange: [0.8, 1, 0.8],
+      extrapolate: 'clamp',
+    });
+    return { scale, opacity };
+  }
+
+  mapViewRender(marker, index) {
+    const interpolations = this.state.markers.map((marker, index) => {
+      return this.interpolate(marker, index);
+    });
+    const scaleStyle = {
+      transform: [
+        {
+          scale: interpolations[index].scale,
+        },
+      ],
+    };
+    const opacityStyle = {
+      opacity: interpolations[index].opacity,
+    };
+    if (this.state.selectedMarkerIndex === index) {
+      return (
+          <MapView.Marker key={index} coordinate={marker.coordinate}>
+            <View style={styles.markerDescription}>
+              <Text style={styles.markerHeaderText}>
+                {marker.title}
+              </Text>
+              <Text style={styles.markerDescriptionText}>
+                {marker.description}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => this._markerPressed(index)}>
+              <View style={styles.markerWrapSelected}>
+                <View style={styles.ringSelected} />
+                  <View style={styles.marker}>
+                    <Image
+                      source={marker.image}
+                      style={styles.markerImage}
+                      resizeMode='cover'
+                    />
+                  </View>
+              </View>
+            </TouchableOpacity>
+          </MapView.Marker>
+      );
+    }
+    return (
+        <MapView.Marker key={index} coordinate={marker.coordinate}>
+          <TouchableOpacity onPress={() => this._markerPressed(index)} >
+            <View style={styles.markerWrap}>
+              <View style={styles.ring} />
+                <View style={styles.marker} />
+            </View>
+          </TouchableOpacity>
+        </MapView.Marker>
+    );
   }
 
   render() {
     console.log(`email from state:${this.state.email}`);
-
-    const interpolations = this.state.markers.map((marker, index) => {
-      const inputRange = [
-        (index - 1) * CARD_WIDTH,
-        index * CARD_WIDTH,
-        ((index + 1) * CARD_WIDTH),
-      ];
-      const scale = this.animation.interpolate({
-        inputRange,
-        outputRange: [1.0, 2.0, 1.0],
-        extrapolate: 'clamp',
-      });
-      const opacity = this.animation.interpolate({
-        inputRange,
-        outputRange: [0.8, 1, 0.8],
-        extrapolate: 'clamp',
-      });
-      return { scale, opacity };
-    });
 
     const currentUser = {
       email: this.state.email,
@@ -249,45 +332,29 @@ class MapForm extends Component {
          onLeft={() => this._chooseUser(currentUser)}
          onRight={() => console.log('pressed search')}
         />
+        <SearchBar
+          placeholder="Search location..."
+          round
+          onChangeText={text => this._searchLocation(text)}
+          autoCorrect={false}
+        />
         <View style={styles.container}>
           <MapView
             ref={map => this.map = map}
             style={styles.container}
             showsUserLocation
             followUserLocation
-            onRegionChange={this._fetchMarkers.bind(this)}
+            onRegionChangeComplete={this._fetchMarkers.bind(this)}
           >
             {this.state.markers.map((marker, index) => {
-              const scaleStyle = {
-                transform: [
-                  {
-                    scale: interpolations[index].scale,
-                  },
-                ],
-              };
-              const opacityStyle = {
-                opacity: interpolations[index].opacity,
-              };
-              return (
-                <MapView.Marker key={index} coordinate={marker.coordinate}>
-                  <Animated.View style={[styles.markerWrap, opacityStyle]}>
-                    <Animated.View style={[styles.ring, scaleStyle]} />
-                    <View style={styles.marker}>
-                      <Image
-                        source={marker.image}
-                        style={styles.markerImage}
-                        resizeMode='cover'
-                      />
-                    </View>
-                  </Animated.View>
-                </MapView.Marker>
-              );
+              return this.mapViewRender(marker, index)
             })}
           </MapView>
           <Animated.ScrollView
+            ref="scrollView"
             horizontal
             scrollEventThrottle={1}
-            showsHorizontalScrollIndicator={false}
+            showsHorizontalScrollIndicator={true}
             snapToInterval={CARD_WIDTH}
             onScroll={Animated.event(
               [
@@ -349,7 +416,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 0,
     left: 0,
     right: 0,
     paddingVertical: 10,
@@ -357,11 +424,30 @@ const styles = StyleSheet.create({
   endPadding: {
     paddingRight: DEVICE_WIDTH - CARD_WIDTH,
   },
+  markerDescription: {
+    padding: 5,
+    bottom: 20,
+    elevation: 2,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: Colors.main,
+    backgroundColor: 'white',
+    marginHorizontal: 10,
+    shadowColor: 'black',
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    width: MARKER_WIDTH,
+    overflow: 'hidden',
+    flex: 1
+  },
   card: {
     padding: 10,
     elevation: 2,
     backgroundColor: 'white',
     marginHorizontal: 10,
+    borderColor: Colors.main,
+    borderWidth: 1,
     shadowColor: 'black',
     shadowRadius: 5,
     shadowOpacity: 0.3,
@@ -386,7 +472,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   cardtitle: {
-    fontSize: 16,
+    fontSize: 14,
     marginTop: 5,
     fontWeight: 'bold',
     color: Colors.main
@@ -395,9 +481,15 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Colors.lightGray,
   },
+  markerWrapSelected: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 1.0
+  },
   markerWrap: {
     alignItems: 'center',
     justifyContent: 'center',
+    opacity: 0.8
   },
   marker: {
     width: 8,
@@ -406,6 +498,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.main,
+  },
+  ringSelected: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.main,
+    position: 'absolute',
+    borderWidth: 1,
+    borderColor: Colors.main,
   },
   ring: {
     width: 24,
@@ -445,44 +546,13 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     backgroundColor: 'white',
   },
+  markerHeaderText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  markerDescriptionText: {
+    fontSize: 12,
+  }
 });
 
 export default MapForm;
-
-// changePosition(latOffset, lonOffset) {
-//   const latitude = this.state.region.latitude + latOffset;
-//   const longitude = this.state.region.longitude + lonOffset;
-//   this.setState({ region: { latitude, longitude } });
-//   this.updateMap();
-// }
-//
-// updateMap() {
-//   const { curPos, prevPos } = this.state;
-//   const curRot = this.getRotation(prevPos, curPos);
-//   this.map.animateCamera({ heading: curRot, center: curPos, pitch: curAng });
-// }
-
-// onMapPress(e) {
-//   const region = {
-//     latitude:       e.nativeEvent.coordinate.latitude,
-//     longitude:      e.nativeEvent.coordinate.longitude,
-//     latitudeDelta:  0.00922*1.5,
-//     longitudeDelta: 0.00421*1.5
-//   }
-//   console.log(region);
-//   this.onRegionChange(region, region.latitude, region.longitude);
-// }
-
-// _getCurrentPosition = async () => {
-//   navigator.geolocation.watchPosition((position) => {
-//     // Create the object to update this.state.mapRegion through the onRegionChange function
-//     const region = {
-//       latitude:       position.coords.latitude,
-//       longitude:      position.coords.longitude,
-//       latitudeDelta:  0.00922*1.5,
-//       longitudeDelta: 0.00421*1.5
-//     };
-//     console.log(region);
-//     this.onRegionChange(region);
-//   }, (error) => console.log(error));
-// }

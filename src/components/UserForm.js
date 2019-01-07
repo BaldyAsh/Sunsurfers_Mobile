@@ -17,9 +17,9 @@ class UserForm extends Component {
   constructor(props) {
     super(props);
     console.log(`email from props:${props.email}`);
-    this.state = { delete: props.delete ? props.delete : false,
-                   add: props.add ? props.add : false,
-                   editable: props.editable ? props.editable : true,
+    this.state = { delete: props.delete,
+                   add: props.add,
+                   editable: props.editable,
                    changed: false,
                    firstname: props.firstname,
                    lastname: props.lastname,
