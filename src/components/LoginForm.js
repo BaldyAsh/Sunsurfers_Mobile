@@ -20,14 +20,6 @@ class LoginForm extends Component {
   }
 
   componentWillMount() {
-    // firebase.initializeApp({
-    //   apiKey: 'AIzaSyAK9MCG3l6dC2I85sepp1Vx8fPOOa0qzaQ',
-    //   authDomain: 'sunsurfers-9dc7c.firebaseapp.com',
-    //   databaseURL: 'https://sunsurfers-9dc7c.firebaseio.com',
-    //   projectId: 'sunsurfers-9dc7c',
-    //   storageBucket: 'sunsurfers-9dc7c.appspot.com',
-    //   messagingSenderId: '902563320929'
-    // });
     console.log('Mounted 0.5');
   }
 
@@ -53,37 +45,6 @@ class LoginForm extends Component {
             this.onLoginFail.bind(this)
           })
       })
-
-    // fetch(API+'registration', {
-    //      method: 'POST',
-    //      headers: {
-    //        Accept: 'application/json',
-    //        'Content-Type': 'application/json'
-    //      },
-    //      body: JSON.stringify({
-    //        email: this.state.email
-    //      }),
-    //   })
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //      console.log(responseJson);
-    //      let resp = JSON.parse();
-    //      let authToken = resp.data.authToken;
-    //      this.onLoginSuccess.bind(this)
-    //   })
-    //   .catch((error) => {
-    //      this.onLoginFail.bind(this);
-    //   });
-
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //   .then(this.onLoginSuccess.bind(this))
-    //   .catch(() => {
-    //     firebase.auth().createUserWithEmailAndPassword(email, password)
-    //       .then(this.onRegistrationSuccess.bind(this))
-    //       .catch(this.onLoginFail.bind(this));
-    //   });
-
-
   }
 
   authenticate = async (email, password) => {
@@ -218,37 +179,3 @@ const styles = {
 
 export default LoginForm;
 
-// <Card>
-//   <CardSection>
-//     <Logo />
-//   </CardSection>
-//   <CardSection>
-//     <Input
-//       borderColor='#FBBF09'
-//       textColor='#FFFFFF'
-//       placeholderColor='white'
-//       placeholder="E-mail"
-//       label="Email"
-//       value={this.state.email}
-//       onChangeText={email => this.setState({ email })}
-//     />
-//   </CardSection>
-//   <CardSection>
-//     <Input
-//       borderColor='#FBBF09'
-//       textColor='#FFFFFF'
-//       placeholderColor='white'
-//       secureTextEntry
-//       placeholder="Password"
-//       label="Password"
-//       value={this.state.password}
-//       onChangeText={password => this.setState({ password })}
-//     />
-//   </CardSection>
-//   <CardSection>
-//     <Error text={this.state.error} />
-//   </CardSection>
-//   <CardSection>
-//     {this.renderButton()}
-//   </CardSection>
-// </Card>
