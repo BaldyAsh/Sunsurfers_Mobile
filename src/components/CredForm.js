@@ -31,54 +31,57 @@ class CredForm extends Component {
   }
 
   onButtonPress() {
-    const { firstname,
-            lastname,
-            info,
-            pictureUrl,
-            picture } = this.state;
+    const user = this.state;
     const data = DataManager.getInstance();
     const email = data.getUserEmail();
+    const authToken = data.getAuthToken();
 
     console.log(email);
+    console.log(authToken);
 
     this.setState({ error: '', loading: true });
 
-    // fetch(API+'registration', {
-    //      method: 'POST',
-    //      headers: {
-    //        Accept: 'application/json',
-    //        'Content-Type': 'application/json'
-    //      },
-    //      body: JSON.stringify({
-    //        authToken: this.props.authToken,
-    //        firstname: firstname,
-    //        lastname: lastname,
-    //        info: info,
-    //        picture: picture,
-    //      }),
-    //   })
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //      console.log(responseJson);
-    //      this.onUpdatingProfileSuccess.bind(this)
+    // this.updateProfile(user, email, authToken)
+    //   .then(() => {
+    //     this.onUpdatingProfileSuccess.bind(this)
     //   })
     //   .catch((error) => {
-    //      this.onUpdatingProfileFail.bind(this);
-    //   });
+    //     console.log(error);
+    //     this.onUpdatingProfileFail(error).bind(this)
+    //   })
 
     this.onUpdatingProfileSuccess();
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //   .then(this.onLoginSuccess.bind(this))
-    //   .catch(() => {
-    //     firebase.auth().createUserWithEmailAndPassword(email, password)
-    //       .then(this.onRegistrationSuccess.bind(this))
-    //       .catch(this.onLoginFail.bind(this));
-    //   });
   }
 
-  onUpdatingProfileFail() {
-    console.log('Wrong data');
-    this.setState({ error: 'Wrong data', loading: false });
+  updateProfile = async (user, email, authToken) => {
+    let json = {
+      authToken: authToken,
+      email: email,
+      user: {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        info: user.info,
+      }
+    }
+    return new Promise((resolve, reject) => {
+      setTimeout(function() {
+        axios.post(API+'profile', {
+          json
+        })
+        .then(function (response) {
+          console.log(response);
+          resolve();
+        })
+        .catch(function (error) {
+          console.log(error);
+          reject(error);
+        });
+      }, 10000);
+    })
+  }
+
+  onUpdatingProfileFail(error) {
+    this.setState({ error: 'Failed: '+error, loading: false });
   }
 
   onUpdatingProfileSuccess() {

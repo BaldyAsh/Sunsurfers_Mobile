@@ -42,7 +42,7 @@ class LoginForm extends Component {
           })
           .catch((error) => {
             console.log(error);
-            this.onLoginFail.bind(this)
+            this.onLoginFail(error).bind(this)
           })
       })
   }
@@ -83,9 +83,8 @@ class LoginForm extends Component {
     })
   }
 
-  onLoginFail() {
-    console.log('Authentication Failed');
-    this.setState({ error: 'Authentication Failed', loading: false });
+  onLoginFail(error) {
+    this.setState({ error: 'Failed: '+error, loading: false });
   }
 
   onLoginSuccess = async (email, authToken) => {
