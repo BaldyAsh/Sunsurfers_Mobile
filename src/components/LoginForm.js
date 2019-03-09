@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, AsyncStorage, StatusBar } from 'react-native';
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 
 import { Button, Input, Spinner, Logo, Error } from './common';
@@ -11,6 +10,7 @@ import DataManager from '../helpers/DataManager';
 const {
   API
 } = require('../helpers/Constants');
+const axios = require('axios');
 
 class LoginForm extends Component {
   constructor(props) {
@@ -20,14 +20,14 @@ class LoginForm extends Component {
   }
 
   componentWillMount() {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyAK9MCG3l6dC2I85sepp1Vx8fPOOa0qzaQ',
-      authDomain: 'sunsurfers-9dc7c.firebaseapp.com',
-      databaseURL: 'https://sunsurfers-9dc7c.firebaseio.com',
-      projectId: 'sunsurfers-9dc7c',
-      storageBucket: 'sunsurfers-9dc7c.appspot.com',
-      messagingSenderId: '902563320929'
-    });
+    // firebase.initializeApp({
+    //   apiKey: 'AIzaSyAK9MCG3l6dC2I85sepp1Vx8fPOOa0qzaQ',
+    //   authDomain: 'sunsurfers-9dc7c.firebaseapp.com',
+    //   databaseURL: 'https://sunsurfers-9dc7c.firebaseio.com',
+    //   projectId: 'sunsurfers-9dc7c',
+    //   storageBucket: 'sunsurfers-9dc7c.appspot.com',
+    //   messagingSenderId: '902563320929'
+    // });
     console.log('Mounted 0.5');
   }
 
@@ -35,6 +35,24 @@ class LoginForm extends Component {
     const { email, password } = this.state;
 
     this.setState({ error: '', loading: true });
+
+    this.authenticate(email, password)
+      .then((authToken) => {
+        console.log(authToken);
+        this.onLoginSuccess(email, authToken).bind(this)
+      })
+      .catch((error) => {
+        console.log(error);
+        this.register(email, password)
+          .then((authToken) => {
+            console.log(authToken);
+            this.onRegistrationSuccess(email, authToken).bind(this)
+          })
+          .catch((error) => {
+            console.log(error);
+            this.onLoginFail.bind(this)
+          })
+      })
 
     // fetch(API+'registration', {
     //      method: 'POST',
@@ -57,13 +75,51 @@ class LoginForm extends Component {
     //      this.onLoginFail.bind(this);
     //   });
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(this.onLoginSuccess.bind(this))
-      .catch(() => {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(this.onRegistrationSuccess.bind(this))
-          .catch(this.onLoginFail.bind(this));
-      });
+    // firebase.auth().signInWithEmailAndPassword(email, password)
+    //   .then(this.onLoginSuccess.bind(this))
+    //   .catch(() => {
+    //     firebase.auth().createUserWithEmailAndPassword(email, password)
+    //       .then(this.onRegistrationSuccess.bind(this))
+    //       .catch(this.onLoginFail.bind(this));
+    //   });
+
+
+  }
+
+  authenticate = async (email, password) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(function() {
+        axios.post(API+'auth', {
+          email: email,
+        })
+        .then(function (response) {
+          console.log(response);
+          resolve(response.data.data.authToken);
+        })
+        .catch(function (error) {
+          console.log(error);
+          reject(error);
+        });
+      }, 10000);
+    })
+  }
+
+  register = async (email, password) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(function() {
+        axios.post(API+'registration', {
+          email: email,
+        })
+        .then(function (response) {
+          console.log(response);
+          resolve(response.data.data.authToken);
+        })
+        .catch(function (error) {
+          console.log(error);
+          reject(error);
+        });
+      }, 10000);
+    })
   }
 
   onLoginFail() {
@@ -71,11 +127,13 @@ class LoginForm extends Component {
     this.setState({ error: 'Authentication Failed', loading: false });
   }
 
-  onLoginSuccess = async () => {
+  onLoginSuccess = async (email, authToken) => {
     try {
-      await AsyncStorage.setItem('USER', this.state.email);
+      await AsyncStorage.setItem('EMAIL', email);
+      await AsyncStorage.setItem('TOKEN', authToken);
       const data = DataManager.getInstance();
-      data.setUserEmail(this.state.email);
+      data.setUserEmail(email);
+      data.setAuthToken(authToken);
       this.setState({
         email: '',
         password: '',
@@ -89,11 +147,13 @@ class LoginForm extends Component {
     }
   }
 
-  onRegistrationSuccess = async () => {
+  onRegistrationSuccess = async (email, authToken) => {
     try {
-      await AsyncStorage.setItem('USER', this.state.email);
+      await AsyncStorage.setItem('EMAIL', email);
+      await AsyncStorage.setItem('TOKEN', authToken);
       const data = DataManager.getInstance();
-      data.setUserEmail(this.state.email);
+      data.setUserEmail(email);
+      data.setAuthToken(authToken);
       this.setState({
         email: '',
         password: '',

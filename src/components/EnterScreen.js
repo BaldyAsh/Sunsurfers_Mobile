@@ -7,13 +7,13 @@ import Wallpaper from './common/Wallpaper';
 class EnterScreen extends Component {
 
   componentDidMount() {
-    AsyncStorage.getItem('USER').then((value) => {
+    AsyncStorage.getItem('EMAIL').then((value) => {
       if (value !== null) {
-        console.log(`user:${value}`);
+        console.log(`email:${value}`);
         const data = DataManager.getInstance();
         data.setUserEmail(value);
         const emailCheck = data.getUserEmail();
-        console.log(`user check:${emailCheck}`);
+        console.log(`email check:${emailCheck}`);
         setTimeout(() => {
           Actions.tab1();
         }, 500);

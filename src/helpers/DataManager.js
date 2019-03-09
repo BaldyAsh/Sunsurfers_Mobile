@@ -3,6 +3,7 @@ export default class DataManager {
     static myInstance = null;
 
     _userEmail = '';
+    _authToken = '';
 
     static getInstance() {
         if (DataManager.myInstance == null) {
@@ -18,5 +19,13 @@ export default class DataManager {
 
     setUserEmail(email) {
         this._userEmail = email;
+    }
+
+    getAuthToken() {
+        return this._authToken;
+    }
+
+    setAuthToken(authToken) {
+        this._authToken = authToken;
     }
 }
